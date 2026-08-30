@@ -1,1 +1,1 @@
-U11 Match Day v2: persistent season statistics, match history, goals, assists, appearances, minutes, results, captain, formation, quarter timer and roll-on/roll-off substitutions.
+U11 Match Day v4. Squad: Oscar, Samuel, Parker, Finlay, Jacob, Cyrus, Harry, Ronnie, Jaisane, Josh. Host index.html on a static web host, then open it in Safari and use Share > Add to Home Screen.
