@@ -1,1 +1,1 @@
-U11 Match Day v4. Squad: Oscar, Samuel, Parker, Finlay, Jacob, Cyrus, Harry, Ronnie, Jaisane, Josh. Host index.html on a static web host, then open it in Safari and use Share > Add to Home Screen.
+U11 Match Day v5. Mark players unavailable, select starting 7, assign formation/positions and captain. Live substitutions, timer, goals/assists and season Games/Starts/Sub Apps/Minutes/Goals/Assists are included.

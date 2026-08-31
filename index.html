@@ -1,60 +1,78 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="U11 Match Day">
-<meta name="theme-color" content="#101820">
-<title>U11 Match Day v4</title>
+<html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="U11 Match Day">
+<meta name="theme-color" content="#101820"><title>U11 Match Day v5</title>
 <style>
-body{margin:0;background:#eef2f4;color:#14202b;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}.app{max-width:760px;margin:auto;padding-bottom:70px}
-header{background:#101820;color:#fff;padding:18px 14px 12px;position:sticky;top:0;z-index:5}.tabs{display:flex;gap:6px;margin-top:10px}
-button,input,select{font:inherit;padding:11px;border:1px solid #d4dde2;border-radius:10px;background:#fff}button{font-weight:800;min-height:44px}.tab{flex:1;background:#293944;color:#fff}.active,.green{background:#20a477;color:#fff}.red{background:#ffe3e3;color:#a61e1e}
-main{padding:10px}.card{background:#fff;border:1px solid #dce2e6;border-radius:15px;padding:13px;margin-bottom:10px}.row{display:flex;justify-content:space-between;align-items:center;gap:8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.score{display:flex;justify-content:space-between;align-items:center}.score b{font-size:40px}.clock{text-align:center;font-size:32px;font-weight:900}.muted{font-size:12px;color:#68737d}.pill{background:#e8f7f1;color:#087f5b;padding:4px 7px;border-radius:99px;font-size:11px;font-weight:800}
-.pitch{height:350px;position:relative;background:#4f9b68;border:4px solid white;border-radius:15px;overflow:hidden;margin-top:9px}.pitch:before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid #ffffff99}.circle{position:absolute;width:85px;height:85px;border:2px solid #ffffff99;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}
-.node{position:absolute;transform:translate(-50%,-50%);color:#fff;text-align:center;font-size:10px;font-weight:800}.node i{display:block;width:40px;height:40px;border-radius:50%;background:#fff;color:#14202b;line-height:40px;border:3px solid #087f5b;font-style:normal;margin:auto}.cap i{border-color:#ffd43b}
-.player,.event{padding:9px;border-bottom:1px solid #e1e5e8}.on{background:#ecfaf5}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.stat{text-align:center;background:#f5f7f8;padding:10px;border-radius:10px}.stat b{display:block;font-size:22px}.hide{display:none}
-table{width:100%;font-size:13px;border-collapse:collapse}td,th{padding:6px;border-bottom:1px solid #e1e5e8;text-align:right}td:first-child,th:first-child{text-align:left}
-</style></head>
-<body><div class=app><header><b>⚽ U11 Match Day v4</b><div class=muted style="color:#b9c4ca">7-a-side • 4 × 12.5 minutes</div>
+body{margin:0;background:#eef2f4;font-family:-apple-system,BlinkMacSystemFont,Arial;color:#14202b}.app{max-width:760px;margin:auto;padding-bottom:70px}
+header{background:#101820;color:white;padding:18px 14px 12px;position:sticky;top:0;z-index:5}.tabs{display:flex;gap:6px;margin-top:10px}.tab{flex:1;padding:11px;border:0;border-radius:10px;background:#293944;color:white;font-weight:800}.active,.green{background:#20a477;color:white}
+main{padding:10px}.card{background:white;border:1px solid #dce2e6;border-radius:15px;padding:13px;margin-bottom:10px}.row{display:flex;justify-content:space-between;align-items:center;gap:8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button,input,select{font:inherit;padding:10px;border:1px solid #d4dde2;border-radius:10px;background:white}button{font-weight:800;min-height:42px}.red{background:#ffe3e3;color:#a61e1e}.muted{font-size:12px;color:#68737d}.pill{background:#e8f7f1;color:#087f5b;padding:4px 7px;border-radius:99px;font-size:11px;font-weight:800}
+.score{display:flex;justify-content:space-between;align-items:center;margin:8px 0}.score b{font-size:40px}.clock{text-align:center;font-size:32px;font-weight:900}.player{border:1px solid #dfe4e8;border-radius:10px;padding:10px;margin:6px 0}.starter{background:#ecfaf5;border-color:#20a477}.unavailable{opacity:.55;background:#f1f1f1}.event{padding:8px 0;border-bottom:1px solid #e1e5e8}
+.pitch{height:350px;position:relative;background:#4f9b68;border:4px solid white;border-radius:15px;overflow:hidden;margin-top:9px}.pitch:before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid #ffffff99}.circle{position:absolute;width:85px;height:85px;border:2px solid #ffffff99;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}.node{position:absolute;transform:translate(-50%,-50%);color:white;text-align:center;font-size:10px;font-weight:800}.node i{display:block;width:40px;height:40px;border-radius:50%;background:white;color:#14202b;line-height:40px;border:3px solid #087f5b;font-style:normal;margin:auto}.cap i{border-color:#ffd43b}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.stat{text-align:center;background:#f5f7f8;padding:10px;border-radius:10px}.stat b{display:block;font-size:22px}.hide{display:none}table{width:100%;font-size:12px;border-collapse:collapse}td,th{padding:6px 3px;border-bottom:1px solid #e1e5e8;text-align:right}td:first-child,th:first-child{text-align:left}.scroll{overflow:auto}
+</style></head><body><div class=app>
+<header><b>⚽ U11 Match Day v5</b><div class=muted style="color:#b9c4ca">7-a-side • 4 × 12.5 minutes</div>
 <div class=tabs><button id=bm class="tab active" onclick="tab(0)">Match</button><button id=bs class=tab onclick="tab(1)">Season</button></div></header>
 <main><section id=match>
-<div class=card><div class=row><b id=q>Quarter 1 of 4</b><span id=fl class=pill>2-3-1</span></div><div class=score><span>Your Team</span><b><span id=hs>0</span>-<span id=as>0</span></b><span id=ol>Opponent</span></div><div id=clock class=clock>12:30</div><div class=grid><button class=green id=start onclick=timer()>▶ Start</button><button onclick=nq()>Next Quarter</button></div></div>
-<div class=card><b>Match setup</b><div class=grid><input id=opp value=Opponent><input id=len type=number value=12.5 step=.5 min=1></div><div class=grid><select id=form onchange=render()><option>2-3-1</option><option>3-2-1</option><option>2-2-2</option><option>3-3</option></select><select id=cap></select></div></div>
-<div class=card><div class=row><b>Interactive pitch</b><button class=green onclick=goal()>⚽ Goal</button></div><div class=muted>Tap a player to substitute. Yellow ring = captain.</div><div class=pitch id=pitch><div class=circle></div></div></div>
-<div class=card><div class=row><b>Fair-play substitution plan</b><span class=pill>Live</span></div><div class=muted>Prioritises players with the fewest minutes today.</div><div id=plan></div></div>
-<div class=card><b>Players</b><div id=squad></div></div><div class=card><b>Live events</b><div id=events></div></div>
-<div class=card><div class=grid><button class=green onclick=saveMatch()>Save Match</button><button class=red onclick="location.reload()">Reset Match</button></div></div>
+<div class=card><b>Pre-match squad</b><div class=muted>Mark unavailable players, then select exactly 7 starters. Everyone else available goes to the bench.</div><div id=selection></div></div>
+<div class=card><div class=row><b>Starting 7 & formation</b><span id=starterCount class=pill>0 / 7</span></div>
+<div class=grid><select id=form onchange=render()><option>2-3-1</option><option>3-2-1</option><option>2-2-2</option><option>3-3</option></select><select id=cap onchange=render()></select></div>
+<div class=muted>Pitch positions use the order of your starting 7. Tap a pitch player to swap positions.</div>
+<div class=pitch id=pitch><div class=circle></div></div></div>
+<div class=card><b>Match details</b><div class=grid><input id=opp value="Opponent"><input id=length type=number value=12.5 step=.5 min=1></div></div>
+<div class=card><div class=row><b id=q>Quarter 1 of 4</b><span id=fl class=pill>2-3-1</span></div><div class=score><span>Your Team</span><b><span id=hs>0</span> - <span id=as>0</span></b><span id=ol>Opponent</span></div><div id=clock class=clock>12:30</div><div class=grid><button class=green id=start onclick=timer()>▶ Start</button><button onclick=nq()>Next Quarter</button></div></div>
+<div class=card><div class=row><b>Fair-play substitutions</b><span class=pill>Live</span></div><div class=muted>Bench players with fewer minutes are prioritised; players with the most minutes are suggested to come off.</div><div id=subs></div></div>
+<div class=card><div class=row><b>Live controls</b><button class=green onclick=goal()>⚽ Goal</button></div><div id=livePlayers></div></div>
+<div class=card><b>Live events</b><div id=events></div></div>
+<div class=card><div class=grid><button class=green onclick=saveMatch()>Save Match</button><button class=red onclick=resetMatch()>Reset Match</button></div></div>
 </section>
-<section id=season class=hide><div class=card><b>Season overview</b><div class=stats><div class=stat><b id=games>0</b>Games</div><div class=stat><b id=wins>0</b>Wins</div><div class=stat><b id=draws>0</b>Draws</div><div class=stat><b id=losses>0</b>Losses</div><div class=stat><b id=gf>0</b>Goals For</div><div class=stat><b id=ga>0</b>Goals Against</div></div></div>
-<div class=card><b>Player leaderboard</b><div id=leaders></div></div><div class=card><b>Season player stats</b><div id=ptable></div></div><div class=card><b>Match history</b><div id=history></div></div><div class=card><button class=red onclick=clearSeason()>Clear Season Data</button></div></section>
-</main></div>
+<section id=season class=hide>
+<div class=card><b>Season overview</b><div class=stats><div class=stat><b id=games>0</b>Games</div><div class=stat><b id=wins>0</b>Wins</div><div class=stat><b id=draws>0</b>Draws</div><div class=stat><b id=losses>0</b>Losses</div><div class=stat><b id=gf>0</b>Goals For</div><div class=stat><b id=ga>0</b>Goals Against</div></div></div>
+<div class=card><div class=row><b>Player stats</b><select id=sortBy onchange=seasonRender><option value=apps>Games</option><option value=starts>Starts</option><option value=subapps>Sub Apps</option><option value=minutes>Minutes</option><option value=goals>Goals</option><option value=assists>Assists</option></select></div><div class=scroll id=ptable></div></div>
+<div class=card><b>Match history</b><div id=history></div></div><div class=card><button class=red onclick=clearSeason()>Clear Season Data</button></div>
+</section></main></div>
 <script>
-const P=["Oscar","Samuel","Parker","Finlay","Jacob","Cyrus","Harry","Ronnie","Jaisane","Josh"];
+const P=["Oscar", "Samuel", "Parker", "Finlay", "Jacob", "Cyrus", "Harry", "Ronnie", "Jaisane", "Josh"];
 const L={"2-3-1":[[50,90],[30,72],[70,72],[20,52],[50,52],[80,52],[50,22]],"3-2-1":[[50,90],[23,72],[50,72],[77,72],[35,52],[65,52],[50,22]],"2-2-2":[[50,90],[32,70],[68,70],[32,48],[68,48],[32,25],[68,25]],"3-3":[[50,90],[23,70],[50,70],[77,70],[23,30],[50,30],[77,30]]};
-let D=JSON.parse(localStorage.getItem("u11v4")||"null")||{matches:[],p:{}};
-P.forEach(n=>D.p[n]??={apps:0,goals:0,assists:0,minutes:0});
-let Q=1,R=750,running=false,timerId,H=0,A=0,on=[0,1,2,3,4,5,6],T={},E=[];P.forEach(n=>T[n]=0);
-const F=x=>String(Math.floor(Math.max(0,x)/60)).padStart(2,"0")+":"+String(Math.max(0,x)%60).padStart(2,"0"),QS=()=>Math.round((+len.value||12.5)*60);
+let D=JSON.parse(localStorage.getItem("u11v5")||"null")||{matches:[],p:{},availability:{}};
+P.forEach(n=>{D.p[n]??={apps:0,starts:0,subapps:0,minutes:0,goals:0,assists:0};D.availability[n]=D.availability[n]??true});
+let starters=[],Q=1,R=750,running=false,timerId,H=0,A=0,T={},E=[];
+P.forEach(n=>T[n]=0);
+const F=x=>String(Math.floor(Math.max(0,x)/60)).padStart(2,"0")+":"+String(Math.max(0,x)%60).padStart(2,"0"),QS=()=>Math.round((+length.value||12.5)*60);
+function avail(){return P.filter(n=>D.availability[n])}
 function render(){
-fl.textContent=form.value;q.textContent=`Quarter ${Q} of 4`;clock.textContent=F(R);hs.textContent=H;as.textContent=A;ol.textContent=opp.value||"Opponent";
-let old=cap.value;cap.innerHTML=P.map(n=>`<option>${n}</option>`).join("");if(P.includes(old))cap.value=old;
-pitch.querySelectorAll(".node").forEach(x=>x.remove());
-L[form.value].forEach((xy,k)=>{let i=on[k];if(i===undefined)return;let n=document.createElement("div");n.className="node"+(P[i]==cap.value?" cap":"");n.style.left=xy[0]+"%";n.style.top=xy[1]+"%";n.innerHTML="<i>"+P[i].slice(0,5)+"</i>"+P[i];n.onclick=()=>pitchSub(i);pitch.appendChild(n)});
-let bench=P.map((n,i)=>({n:n,i:i,m:T[n]})).filter(x=>!on.includes(x.i)).sort((a,b)=>a.m-b.m);
-plan.innerHTML=bench.length?bench.slice(0,3).map(x=>`<div class=event><b>Bring on ${x.n}</b> — ${F(x.m)} today</div>`).join(""):"No substitutes available";
-squad.innerHTML=P.map((n,i)=>`<div class="player ${on.includes(i)?"on":""}"><div class=row><b>${n}</b><span class=pill>${on.includes(i)?"ON":"BENCH"}</span></div><div class=muted>Today ${F(T[n])} • Season ${D.p[n].minutes} min • ⚽ ${D.p[n].goals} • 🅰️ ${D.p[n].assists}</div><button onclick="${on.includes(i)?"pitchSub":"bringOn"}(${i})">${on.includes(i)?"Sub out":"Bring on"}</button></div>`).join("");
-events.innerHTML=E.length?E.slice().reverse().map(x=>`<div class=event>${x}</div>`).join(""):"<span class=muted>No events yet.</span>";seasonRender()}
-function timer(){if(running){clearInterval(timerId);running=false;start.textContent="▶ Start";return}running=true;start.textContent="⏸ Pause";timerId=setInterval(()=>{R--;on.forEach(i=>T[P[i]]++);render();if(R<=0){clearInterval(timerId);running=false;start.textContent="▶ Start";alert("Quarter finished — use Next Quarter.")}},1000)}
-function pitchSub(i){if(!on.includes(i))return bringOn(i);let b=P.map((n,j)=>({n:n,j:j,m:T[n]})).filter(x=>!on.includes(x.j)).sort((a,b)=>a.m-b.m);if(!b.length)return;let s=prompt(P[i]+" coming off. Enter bench number:\n"+b.map((x,k)=>(k+1)+". "+x.n+" ("+F(x.m)+")").join("\n"));let k=+s-1;if(k<0||k>=b.length)return;on=on.filter(x=>x!==i);on.push(b[k].j);E.push("🔄 "+P[i]+" off → "+P[b[k].j]+" on");render()}
-function bringOn(i){if(on.length>=7)return;let out=on.slice().sort((a,b)=>T[P[b]]-T[P[a]])[0];if(out===undefined)return;on=on.filter(x=>x!==out);on.push(i);E.push("🔄 "+P[out]+" off → "+P[i]+" on");render()}
-function nq(){if(Q>=4)return alert("All four quarters complete");Q++;R=QS();E.push("⏱️ Quarter "+(Q-1)+" finished");render()}
-function goal(){let s=prompt("Goal scorer:\n"+P.join(", "));if(!P.includes(s))return;let a=prompt("Assist (optional):");if(a&&!P.includes(a))a="";H++;D.p[s].goals++;if(a)D.p[a].assists++;E.push("⚽ "+s+(a?" — assist "+a:""));render()}
-function saveMatch(){let o=opp.value.trim();if(!o)return alert("Enter opponent");let r=H>A?"W":H<A?"L":"D";D.matches.push({date:new Date().toISOString(),opponent:o,score:H,against:A,result:r,formation:form.value,captain:cap.value,events:E.slice()});P.forEach(n=>{if(T[n]>0){D.p[n].apps++;D.p[n].minutes+=Math.round(T[n]/60)}});localStorage.setItem("u11v4",JSON.stringify(D));alert("Match saved");tab(1)}
-function seasonRender(){let m=D.matches;games.textContent=m.length;wins.textContent=m.filter(x=>x.result=="W").length;draws.textContent=m.filter(x=>x.result=="D").length;losses.textContent=m.filter(x=>x.result=="L").length;gf.textContent=m.reduce((a,x)=>a+x.score,0);ga.textContent=m.reduce((a,x)=>a+x.against,0);let r=P.slice().sort((a,b)=>(D.p[b].goals+D.p[b].assists)-(D.p[a].goals+D.p[a].assists));leaders.innerHTML=r.map((n,i)=>`<div class=event><b>${i+1}. ${n}</b> — ⚽${D.p[n].goals} 🅰️${D.p[n].assists} • ${D.p[n].minutes} min</div>`).join("");ptable.innerHTML="<table><tr><th>Player</th><th>Apps</th><th>G</th><th>A</th><th>Min</th></tr>"+P.map(n=>`<tr><td>${n}</td><td>${D.p[n].apps}</td><td>${D.p[n].goals}</td><td>${D.p[n].assists}</td><td>${D.p[n].minutes}</td></tr>`).join("")+"</table>";history.innerHTML=m.length?m.slice().reverse().map(x=>`<div class=event><b>${x.score}-${x.against} vs ${x.opponent}</b> <span class=pill>${x.result}</span><div class=muted>${new Date(x.date).toLocaleDateString()} • ${x.formation} • Captain ${x.captain}</div></div>`).join(""):"<span class=muted>No matches saved.</span>"}
+ fl.textContent=form.value;q.textContent="Quarter "+Q+" of 4";clock.textContent=F(R);hs.textContent=H;as.textContent=A;ol.textContent=opp.value||"Opponent";
+ starterCount.textContent=starters.length+" / 7";
+ selection.innerHTML=P.map((n,i)=>`<div class="player ${D.availability[n]?(starters.includes(n)?"starter":""):"unavailable"}"><div class=row><b>${n}</b><button class=small onclick="toggleAvail(${i})">${D.availability[n]?"Available":"Unavailable"}</button></div><div class=muted>${!D.availability[n]?"Not available today":starters.includes(n)?"Starting 7": "Available / Bench"}</div>${D.availability[n]?`<button onclick="toggleStarter(${i})">${starters.includes(n)?"Remove starter":"Select starter"}</button>`:""}</div>`).join("");
+ let old=cap.value;cap.innerHTML=starters.map(n=>`<option>${n}</option>`).join("");if(starters.includes(old))cap.value=old;
+ pitch.querySelectorAll(".node").forEach(x=>x.remove());
+ L[form.value].forEach((xy,k)=>{let n=starters[k];if(!n)return;let el=document.createElement("div");el.className="node"+(n===cap.value?" cap":"");el.style.left=xy[0]+"%";el.style.top=xy[1]+"%";el.innerHTML="<i>"+n.slice(0,5)+"</i>"+n;el.onclick=()=>swapPos(k);pitch.appendChild(el)});
+ let bench=avail().filter(n=>!starters.includes(n)).sort((a,b)=>T[a]-T[b]);
+ let field=starters.slice().sort((a,b)=>T[b]-T[a]);
+ subs.innerHTML=bench.length?bench.slice(0,3).map(n=>`<div class=event><b>Bring on ${n}</b> — ${F(T[n])} today <button onclick="quickSub('${n}')">Sub in</button></div>`).join(""):"<span class=muted>No available bench players.</span>";
+ livePlayers.innerHTML=starters.map(n=>`<div class=player starter"><div class=row><b>${n}</b><span class=pill>${F(T[n])}</span></div><button onclick="manualSub('${n}')">Sub out</button></div>`).join("");
+ events.innerHTML=E.length?E.slice().reverse().map(x=>`<div class=event>${x}</div>`).join(""):"<span class=muted>No events yet.</span>";
+ seasonRender();
+}
+function toggleAvail(i){let n=P[i];if(D.availability[n]&&starters.includes(n))starters=starters.filter(x=>x!==n);D.availability[n]=!D.availability[n];localStorage.setItem("u11v5",JSON.stringify(D));render()}
+function toggleStarter(i){let n=P[i];if(!D.availability[n])return;if(starters.includes(n))starters=starters.filter(x=>x!==n);else if(starters.length<7)starters.push(n);else alert("You already have 7 starters.");render()}
+function swapPos(k){let s=prompt("Choose starter number for this position:\n"+starters.map((n,i)=>(i+1)+". "+n).join("\n"));let i=+s-1;if(i>=0&&i<starters.length){[starters[k],starters[i]]=[starters[i],starters[k]];render()}}
+function timer(){if(starters.length!==7)return alert("Select exactly 7 starters.");if(running){clearInterval(timerId);running=false;start.textContent="▶ Start";return}running=true;start.textContent="⏸ Pause";timerId=setInterval(()=>{R--;starters.forEach(n=>T[n]++);render();if(R<=0){clearInterval(timerId);running=false;start.textContent="▶ Start";alert("Quarter finished — use Next Quarter.")}},1000)}
+function quickSub(n){let out=starters.slice().sort((a,b)=>T[b]-T[a])[0];if(out)substitute(out,n)}
+function manualSub(n){let b=avail().filter(x=>!starters.includes(x)).sort((a,b)=>T[a]-T[b]);if(!b.length)return alert("No available bench players.");let s=prompt(n+" off. Choose bench:\n"+b.map((x,i)=>(i+1)+". "+x+" ("+F(T[x])+")").join("\n"));let i=+s-1;if(i>=0&&i<b.length)substitute(n,b[i])}
+function substitute(out,inn){let i=starters.indexOf(out);starters[i]=inn;E.push("🔄 "+out+" off → "+inn+" on");render()}
+function nq(){if(Q>=4)return alert("All four quarters complete.");if(starters.length!==7)return alert("Select 7 starters.");Q++;R=QS();E.push("⏱️ Quarter "+(Q-1)+" finished");render()}
+function goal(){if(starters.length!==7)return alert("Select 7 starters.");let s=prompt("Goal scorer:\n"+avail().join(", "));if(!P.includes(s)||!D.availability[s])return;let a=prompt("Assist (optional):");if(a&&!P.includes(a))a="";if(a===s)a="";H++;E.push("⚽ "+s+(a?" — assist "+a:""));if(a)E.push("🅰️ "+a);render()}
+function saveMatch(){if(starters.length!==7)return alert("Select exactly 7 starters.");let o=opp.value.trim();if(!o)return alert("Enter opponent.");let r=H>A?"W":H<A?"L":"D";
+let startersAtSave=starters.slice();let played=P.filter(n=>T[n]>0);let subapps=played.filter(n=>!startersAtSave.includes(n));
+E.filter(x=>x.startsWith("⚽ ")).forEach(x=>{let n=x.substring(2).split(" — ")[0].trim();if(D.p[n])D.p[n].goals++});E.filter(x=>x.startsWith("🅰️ ")).forEach(x=>{let n=x.substring(3).trim();if(D.p[n])D.p[n].assists++});
+played.forEach(n=>{D.p[n].apps++;D.p[n].minutes+=Math.round(T[n]/60);if(startersAtSave.includes(n))D.p[n].starts++;else D.p[n].subapps++});
+D.matches.push({date:new Date().toISOString(),opponent:o,score:H,against:A,result:r,formation:form.value,captain:cap.value,starters:startersAtSave,events:E.slice()});
+localStorage.setItem("u11v5",JSON.stringify(D));alert("Match saved — season stats updated.");tab(1)}
+function seasonRender(){let m=D.matches;games.textContent=m.length;wins.textContent=m.filter(x=>x.result=="W").length;draws.textContent=m.filter(x=>x.result=="D").length;losses.textContent=m.filter(x=>x.result=="L").length;gf.textContent=m.reduce((a,x)=>a+x.score,0);ga.textContent=m.reduce((a,x)=>a+x.against,0);let k=sortBy.value||"apps";let r=P.slice().sort((a,b)=>(D.p[b][k]||0)-(D.p[a][k]||0));ptable.innerHTML="<table><tr><th>Player</th><th>Games</th><th>Starts</th><th>Sub Apps</th><th>Min</th><th>G</th><th>A</th></tr>"+r.map(n=>`<tr><td>${n}</td><td>${D.p[n].apps}</td><td>${D.p[n].starts}</td><td>${D.p[n].subapps}</td><td>${D.p[n].minutes}</td><td>${D.p[n].goals}</td><td>${D.p[n].assists}</td></tr>`).join("")+"</table>";history.innerHTML=m.length?m.slice().reverse().map(x=>`<div class=event><b>${x.score}-${x.against} vs ${x.opponent}</b> <span class=pill>${x.result}</span><div class=muted>${new Date(x.date).toLocaleDateString()} • ${x.formation} • Captain ${x.captain}</div></div>`).join(""):"<span class=muted>No matches saved.</span>"}
 function tab(x){match.classList.toggle("hide",x);season.classList.toggle("hide",!x);bm.classList.toggle("active",!x);bs.classList.toggle("active",x);seasonRender()}
-function clearSeason(){if(confirm("Delete all season data?")){localStorage.removeItem("u11v4");location.reload()}}
-len.onchange=()=>{if(!running)R=QS()};render();
+function resetMatch(){if(confirm("Reset this match? Saved season data will stay."))location.reload()}
+function clearSeason(){if(confirm("Delete all season data?")){localStorage.removeItem("u11v5");location.reload()}}
+length.onchange=()=>{if(!running)R=QS()};render();
 </script></body></html>
