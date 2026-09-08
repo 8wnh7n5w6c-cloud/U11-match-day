@@ -88,7 +88,7 @@ function render(){
   let gkPlayer=hasDedicatedGK?hasDedicatedGK:starters.find(n=>positions[n]==="GK");let bench=avail().filter(n=>!starters.includes(n)&&n!==gkPlayer).sort((a,b)=>T[a]-T[b]);
   let field=starters.slice().sort((a,b)=>T[b]-T[a]);
   subs.innerHTML=bench.length?bench.slice(0,3).map((n,i)=>{let worst=field[i]||field[0];if(!worst)return "";return `<div class=event><b>Bring on ${n}</b> — ${F(T[n])} today <b>for ${worst}</b> — ${F(T[worst])} today <button onclick="substitute('${worst}','${n}')">Sub</button></div>`}).join(""):"<span class=muted>No available bench players.</span>";
-  livePlayers.innerHTML=starters.map(n=>`<div class="player starter"><div class=row><b>${n}${cap.value===n?'<span class="captain-armband" aria-label="captain">C</span>':""}</b><span class=pill>${F(T[n])}</span></div>${hasDedicatedGK===n?"":`<button onclick="showSubForm('out','${n}')">Sub out</button>`}</div>`).join("");
+  livePlayers.innerHTML=starters.map(n=>`<div class="player starter"><div class=row><b>${n}${cap.value===n?'<span class="captain-armband" aria-label="captain">C</span>':""}</b> <span class="muted">${positions[n]||""}</span><span class=pill>${F(T[n])}</span></div>${hasDedicatedGK===n?"":`<button onclick="showSubForm('out','${n}')">Sub out</button>`}</div>`).join("");
   events.innerHTML=E.length?E.slice().reverse().map(x=>`<div class=event>${x}</div>`).join(""):"<span class=muted>No events yet.</span>";
   hideIfEmpty("subs","No available bench players.");
   hideIfEmpty("livePlayers","");
