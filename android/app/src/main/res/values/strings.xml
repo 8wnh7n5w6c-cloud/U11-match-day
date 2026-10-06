@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Pitch Pal</string>
+    <string name="title_activity_main">Pitch Pal</string>
+    <string name="package_name">com.pitchpal.matchday</string>
+    <string name="custom_url_scheme">com.pitchpal.matchday</string>
+</resources>

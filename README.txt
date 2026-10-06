@@ -1,1 +1,0 @@
-U11 Match Day v5. Mark players unavailable, select starting 7, assign formation/positions and captain. Live substitutions, timer, goals/assists and season Games/Starts/Sub Apps/Minutes/Goals/Assists are included.
