@@ -30,6 +30,10 @@ npm run android
 
 The Android Studio project is in `android/`; the Xcode project is in `ios/App/App.xcodeproj`. Local match and season data continue to use the existing `u11v5` and `playerNames` local-storage keys.
 
+## Publish on GitHub Pages
+
+The `Deploy GitHub Pages` workflow builds the project with the repository URL prefix and deploys it whenever changes reach `main`. In the repository settings, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**. The normal local build and development server continue to use the root path.
+
 ## Code layout
 
 - `src/components/` — focused screens and navigation
