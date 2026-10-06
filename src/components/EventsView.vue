@@ -24,7 +24,11 @@
 </template>
 
 <script>
+import { IonCard, IonCardContent } from '@ionic/vue';
 import { pitchPalView } from '../mixins/pitchPalView.js';
 
-export default pitchPalView(['events'], []);
+export default {
+  components: { IonCard, IonCardContent },
+  ...pitchPalView(['events'], []),
+};
 </script>

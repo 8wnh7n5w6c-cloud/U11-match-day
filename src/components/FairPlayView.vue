@@ -70,7 +70,21 @@
 </template>
 
 <script>
+import {
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+} from '@ionic/vue';
 import { pitchPalView } from '../mixins/pitchPalView.js';
 
-export default pitchPalView(['matchActive', 'events', 'matchFairness', 'seasonFairness', 'matchRows', 'matchPriority', 'recommendedMinutes', 'secondsLeft', 'periodCount', 'quarter', 'periodLength', 'clockText', 'seasonRows', 'data'], ['fairnessColor']);
+export default {
+  components: {
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
+  },
+  ...pitchPalView(['matchActive', 'events', 'matchFairness', 'seasonFairness', 'matchRows', 'matchPriority', 'recommendedMinutes', 'secondsLeft', 'periodCount', 'quarter', 'periodLength', 'clockText', 'seasonRows', 'data'], ['fairnessColor']),
+};
 </script>

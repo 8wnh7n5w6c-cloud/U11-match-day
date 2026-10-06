@@ -108,7 +108,31 @@
 </template>
 
 <script>
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonInput,
+  IonLabel,
+  IonSegment,
+  IonSegmentButton,
+  IonSelect,
+  IonSelectOption,
+} from '@ionic/vue';
 import { pitchPalView } from '../mixins/pitchPalView.js';
 
-export default pitchPalView(['opponent', 'periodType', 'periodLength', 'periodCount', 'formation', 'formations', 'availablePlayers', 'data', 'recordText', 'goalDiff', 'tab'], ['switchSplit']);
+export default {
+  components: {
+    IonButton,
+    IonCard,
+    IonCardContent,
+    IonInput,
+    IonLabel,
+    IonSegment,
+    IonSegmentButton,
+    IonSelect,
+    IonSelectOption,
+  },
+  ...pitchPalView(['opponent', 'periodType', 'periodLength', 'periodCount', 'formation', 'formations', 'availablePlayers', 'data', 'recordText', 'goalDiff', 'tab'], ['switchSplit']),
+};
 </script>

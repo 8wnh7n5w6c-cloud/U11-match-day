@@ -232,7 +232,23 @@
 </template>
 
 <script>
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonSelect,
+  IonSelectOption,
+} from '@ionic/vue';
 import { pitchPalView } from '../mixins/pitchPalView.js';
 
-export default pitchPalView(['opponent', 'matchActive', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'activePlayers', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']);
+export default {
+  components: {
+    IonButton,
+    IonCard,
+    IonCardContent,
+    IonSelect,
+    IonSelectOption,
+  },
+  ...pitchPalView(['opponent', 'matchActive', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'activePlayers', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']),
+};
 </script>

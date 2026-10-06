@@ -58,7 +58,11 @@
 </template>
 
 <script>
+import { IonButton, IonCard, IonCardContent } from '@ionic/vue';
 import { pitchPalView } from '../mixins/pitchPalView.js';
 
-export default pitchPalView(['recordText', 'goalDiff', 'players', 'data', 'playerInitial'], ['clearSeason']);
+export default {
+  components: { IonButton, IonCard, IonCardContent },
+  ...pitchPalView(['recordText', 'goalDiff', 'players', 'data', 'playerInitial'], ['clearSeason']),
+};
 </script>

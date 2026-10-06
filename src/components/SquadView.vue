@@ -11,7 +11,7 @@
       :aria-pressed="quarter === i"
       @click="changePeriod(i)"
     >
-      {{ periodLabel(i) }}
+      {{ periodLabel(i - 1) }}
     </button>
   </div>
   <div class="formation-panel">
@@ -114,7 +114,25 @@
 </template>
 
 <script>
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonLabel,
+  IonSelect,
+  IonSelectOption,
+} from '@ionic/vue';
 import { pitchPalView } from '../mixins/pitchPalView.js';
 
-export default pitchPalView(['players', 'periodCount', 'periodLabel', 'quarter', 'starters', 'formation', 'formations', 'playerPositions', 'positionsList', 'data', 'playerInitial', 'captain', 'availablePlayers'], ['changePeriod', 'selectPlayer', 'toggleAvailability', 'setCaptain', 'beginMatch', 'rememberLineup']);
+export default {
+  components: {
+    IonButton,
+    IonCard,
+    IonCardContent,
+    IonLabel,
+    IonSelect,
+    IonSelectOption,
+  },
+  ...pitchPalView(['players', 'periodCount', 'periodLabel', 'quarter', 'starters', 'formation', 'formations', 'playerPositions', 'positionsList', 'data', 'playerInitial', 'captain', 'availablePlayers'], ['changePeriod', 'selectPlayer', 'toggleAvailability', 'setCaptain', 'beginMatch', 'rememberLineup']),
+};
 </script>
