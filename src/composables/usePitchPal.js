@@ -347,6 +347,17 @@ export function usePitchPal() {
 
   function addOpponentGoal() { awayScore.value++; events.value.unshift('Goal · Opponent'); }
 
+  function chooseSubstitutionPlayer(name) {
+    if (!matchActive.value) return;
+    if (starters.value.includes(name)) {
+      if (name === dedicatedGK.value) return;
+      selectedOut.value = selectedOut.value === name ? '' : name;
+    } else if (bench.value.includes(name)) {
+      selectedIn.value = selectedIn.value === name ? '' : name;
+    } else return;
+    if (selectedOut.value && selectedIn.value) substitute();
+  }
+
   function substitute() {
     if (!selectedOut.value || !selectedIn.value) return;
     const out = selectedOut.value;
@@ -473,7 +484,7 @@ export function usePitchPal() {
     periodCount, periodName, availablePlayers, matchParticipants, bench, activePlayers, substitutionCandidates, currentPeriodTitle, matchRows,
     matchFairness, matchPriority, recommendedMinutes, seasonRows, seasonFairness, goalDiff, recordText,
     resultLabel, clockText: formatClock, changePeriod, selectPlayer, setPlayerPosition, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, beginMatch, restartMatch,
-    toggleClock, nextPeriod, finishMatch, registerGoal, addOpponentGoal, substitute, saveMatch,
+    toggleClock, nextPeriod, finishMatch, registerGoal, addOpponentGoal, chooseSubstitutionPlayer, substitute, saveMatch,
     clearSeason, rememberLineup, formatClock, formatMinutes, periodLabel, playerInitial,
     restoreMatch, dispose: stopClock, fairnessColor,
   };

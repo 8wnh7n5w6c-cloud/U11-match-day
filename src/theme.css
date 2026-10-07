@@ -136,6 +136,9 @@ ion-button.next-button::part(native) { background: var(--background); color: #10
 .pitch-box-top { top: 12px; border-top: 0; }
 .pitch-box-bottom { bottom: 12px; border-bottom: 0; }
 .pitch-player { position: absolute; z-index: 2; display: grid; justify-items: center; min-width: 68px; padding: 6px 7px; transform: translate(-50%, -50%); border: 2px solid #ffffff; border-radius: 14px; color: #122337; box-shadow: 0 3px 8px #10241935; }
+.pitch-player { appearance: none; font: inherit; cursor: pointer; }
+.pitch-player:disabled { opacity: 1; cursor: default; }
+.pitch-player-selected { outline: 3px solid #101b31; outline-offset: 2px; }
 .pitch-player-playing { background: #ffedb5; }
 .pitch-player-idle { background: #a7f3b7; }
 .pitch-player-off { background: #ffc2c6; border-color: #9a2937; }
@@ -146,6 +149,7 @@ ion-button.next-button::part(native) { background: var(--background); color: #10
 .pitch-state-label { margin-top: 3px; color: #7d2530; font-size: 8px; font-weight: 950; letter-spacing: .04em; }
 .pitch-player-keeper .pitch-state-label { color: #354fb7; }
 .fair-play-legend { display: flex; gap: 15px; margin: 0 2px 17px; color: #5d6b80; font-size: 10px; }
+.substitution-hint { margin: 0 1px 10px; color: #46536a; font-size: 11px; line-height: 1.45; }
 .fair-play-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .status-dot { width: 9px; height: 9px; border-radius: 50%; }
 .status-dot.status-green { background: #168354; }.status-dot.status-red { background: #b62c3d; }.status-dot.status-amber { background: #8a5a00; }
@@ -155,6 +159,9 @@ ion-button.next-button::part(native) { background: var(--background); color: #10
 .bench-heading > span { color: #5d6b80; font-size: 10px; font-weight: 750; }
 .bench-list { display: grid; gap: 7px; }
 .bench-player { display: flex; align-items: center; gap: 10px; min-height: 53px; padding: 7px 11px; border: 1px solid #e8ebf1; border-radius: 14px; background: white; }
+.bench-player { width: 100%; color: #172238; font: inherit; text-align: left; cursor: pointer; }
+.bench-player:disabled { opacity: 1; cursor: default; }
+.bench-player-selected { outline: 3px solid #4052c2; outline-offset: 2px; }
 .bench-player.status-green { border-color: #80d8a0; background: #edf9f0; }
 .bench-player.status-amber { border-color: #e8ca83; background: #fff9e9; }
 .bench-player.status-red { border-color: #efb0b6; background: #fff1f2; }

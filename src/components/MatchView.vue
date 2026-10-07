@@ -113,6 +113,12 @@
     <div><span class="eyebrow">MATCH LINEUP</span><h2>On the pitch</h2></div>
     <span class="lineup-count">{{ starters.length }}/7</span>
   </div>
+  <p
+    v-if="matchActive && bench.length"
+    class="substitution-hint"
+  >
+    {{ selectedOut ? `${selectedOut} selected to come off. Choose a player from the bench.` : selectedIn ? `${selectedIn} selected to come on. Choose a player on the pitch.` : 'Tap a player on the pitch and a substitute to make a change.' }}
+  </p>
   <div
     v-if="starters.length"
     class="match-pitch"
@@ -135,13 +141,17 @@
       class="pitch-box pitch-box-bottom"
       aria-hidden="true"
     />
-    <div
+    <button
       v-for="(name, index) in starters"
       :key="name"
+      type="button"
       class="pitch-player"
-      :class="pitchPlayerState(name)"
+      :class="[pitchPlayerState(name), { 'pitch-player-selected': selectedOut === name }]"
       :style="pitchPositionStyle(name, index)"
-      :aria-label="`${name}, ${playerPositions[name] || 'position not set'}, ${formatMinutes(seconds[name])} minutes${name === recommendedSubOut && bench.length && matchActive ? ', suggested to come off' : ''}`"
+      :aria-label="`${name}, ${playerPositions[name] || 'position not set'}, ${formatMinutes(seconds[name])} minutes${name === recommendedSubOut && bench.length && matchActive ? ', suggested to come off' : ''}${name === dedicatedGK ? ', dedicated goalkeeper' : ''}`"
+      :aria-pressed="selectedOut === name"
+      :disabled="!matchActive || name === dedicatedGK"
+      @click="chooseSubstitutionPlayer(name)"
     >
       <span class="pitch-initials">{{ playerInitial(name) }}</span>
       <span class="pitch-position">{{ playerPositions[name] || '—' }}</span>
@@ -154,7 +164,7 @@
         v-else-if="name === dedicatedGK"
         class="pitch-state-label"
       >KEEPER</span>
-    </div>
+    </button>
   </div>
   <div
     v-if="matchActive && !matchReady && bench.length"
@@ -173,11 +183,16 @@
       v-if="bench.length"
       class="bench-list"
     >
-      <div
+      <button
         v-for="name in bench"
         :key="name"
+        type="button"
         class="bench-player"
-        :class="benchPlayerFairnessClass(name)"
+        :class="[benchPlayerFairnessClass(name), { 'bench-player-selected': selectedIn === name }]"
+        :aria-label="`${name}, substitute, ${formatMinutes(seconds[name])} minutes played${name === matchPriority ? ', recommended next on' : ''}`"
+        :aria-pressed="selectedIn === name"
+        :disabled="!matchActive"
+        @click="chooseSubstitutionPlayer(name)"
       >
         <span class="bench-initials">{{ playerInitial(name) }}</span>
         <span class="bench-player-info"><b>{{ name }}</b><small>{{ formatMinutes(seconds[name]) }} min played</small></span>
@@ -193,7 +208,7 @@
           v-else
           class="bench-state-label"
         >SUB</span>
-      </div>
+      </button>
     </div>
     <div
       v-else
@@ -202,58 +217,8 @@
       No available substitutes.
     </div>
   </div>
-  <div
-    v-if="matchActive && bench.length"
-    class="section-heading compact"
-  >
-    <div><span class="eyebrow">FAIR-PLAY ROTATION</span><h2>Make a substitution</h2></div>
-  </div>
-  <ion-card
-    v-if="matchActive && bench.length"
-    class="surface-card"
-  >
-    <ion-card-content>
-      <div class="sub-controls">
-        <ion-select
-          v-model="selectedOut"
-          interface="popover"
-          placeholder="Player off"
-          aria-label="Player going off"
-        >
-          <ion-select-option
-            v-for="name in substitutionCandidates"
-            :key="name"
-            :value="name"
-          >
-            {{ name }} · {{ formatMinutes(seconds[name]) }}m
-          </ion-select-option>
-        </ion-select><span aria-hidden="true">→</span><ion-select
-          v-model="selectedIn"
-          interface="popover"
-          placeholder="Player on"
-          aria-label="Player coming on"
-        >
-          <ion-select-option
-            v-for="name in bench"
-            :key="name"
-            :value="name"
-          >
-            {{ name }} · {{ formatMinutes(seconds[name]) }}m
-          </ion-select-option>
-        </ion-select>
-      </div><ion-button
-        expand="block"
-        class="soft-button"
-        aria-label="Confirm player substitution"
-        :disabled="!selectedOut || !selectedIn"
-        @click="substitute"
-      >
-        Confirm substitution
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
   <div class="section-heading compact">
-    <div><span class="eyebrow">ON THE PITCH</span><h2>{{ starters.length }} players</h2></div><button
+    <div><span class="eyebrow">MATCH STATS</span><h2>Today’s playing time</h2></div><button
       class="text-link"
       type="button"
       @click="tab = 'Events'"
@@ -352,7 +317,7 @@ const matchPitchLayouts = {
 
 const matchView = pitchPalView(
   ['opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'matchParticipants', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events', 'formation', 'playerPositions', 'dedicatedGK', 'matchPriority', 'matchRows'],
-  ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'fairnessColor'],
+  ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'chooseSubstitutionPlayer', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'fairnessColor'],
 );
 
 export default {
