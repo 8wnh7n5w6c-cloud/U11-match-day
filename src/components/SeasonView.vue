@@ -108,9 +108,9 @@
       >
         <div
           class="history-result"
-          :class="match.result.toLowerCase()"
+          :class="(match.result || 'd').toLowerCase()"
         >
-          {{ match.result }}
+          {{ match.result || '—' }}
         </div><div class="history-info">
           <b>{{ match.opponent }}</b><small>{{ new Date(match.date).toLocaleDateString() }}</small>
         </div><strong>{{ match.score }}–{{ match.against }}</strong>
@@ -152,7 +152,10 @@
 import { IonButton, IonCard, IonCardContent, IonSelect, IonSelectOption } from '@ionic/vue';
 import { pitchPalView } from '../mixins/pitchPalView.js';
 
+const seasonView = pitchPalView(['recordText', 'goalDiff', 'players', 'data', 'playerInitial'], ['clearSeason']);
+
 export default {
+  ...seasonView,
   components: { IonButton, IonCard, IonCardContent, IonSelect, IonSelectOption },
   data() {
     return { sortBy: 'apps' };
@@ -162,7 +165,7 @@ export default {
       return [...this.players].sort((a, b) => (this.data.p[b]?.[this.sortBy] || 0) - (this.data.p[a]?.[this.sortBy] || 0));
     },
     seasonSummary() {
-      const matches = this.data.matches;
+      const matches = this.data.matches || [];
       return {
         games: matches.length,
         wins: matches.filter((match) => match.result === 'W').length,
@@ -172,7 +175,7 @@ export default {
         goalsAgainst: matches.reduce((total, match) => total + Number(match.against || 0), 0),
       };
     },
+    ...seasonView.computed,
   },
-  ...pitchPalView(['recordText', 'goalDiff', 'players', 'data', 'playerInitial'], ['clearSeason']),
 };
 </script>
