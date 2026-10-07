@@ -16,8 +16,7 @@
 body { background: #f4f6f9; }
 ion-app { max-width: 680px; margin: 0 auto; background: #f4f6f9; }
 ion-page { background: #f4f6f9; }
-.topbar { --background: #101b31; --color: white; --border-color: transparent; padding: max(env(safe-area-inset-top), 10px) 20px 10px; box-shadow: 0 6px 18px #101b311a; }
-.topbar::part(container) { min-height: 62px; }
+.topbar { display: flex; align-items: center; min-height: 62px; padding: max(env(safe-area-inset-top), 10px) 20px 10px; background: #101b31; color: white; box-shadow: 0 6px 18px #101b311a; }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-mark { display: grid; place-items: center; width: 36px; height: 36px; color: #101b31; background: #80ed99; border-radius: 13px; font-weight: 950; font-size: 19px; transform: rotate(-4deg); }
 .brand strong { display: block; color: #fff; font-size: 16px; letter-spacing: -.3px; }

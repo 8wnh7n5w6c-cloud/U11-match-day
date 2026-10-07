@@ -1,24 +1,21 @@
 <template>
   <IonApp>
     <IonPage>
-      <IonToolbar class="topbar">
-        <div class="brand">
-          <div class="brand-mark">
-            P
+      <IonContent class="main-content">
+        <header class="topbar">
+          <div class="brand">
+            <div class="brand-mark">
+              P
+            </div>
+            <div>
+              <strong>Pitch Pal</strong>
+              <small>Match day, made simple</small>
+            </div>
           </div>
-          <div>
-            <strong>Pitch Pal</strong>
-            <small>Match day, made simple</small>
+          <div class="top-date">
+            {{ today }}
           </div>
-        </div>
-        <div class="top-date">
-          {{ today }}
-        </div>
-      </IonToolbar>
-      <IonContent
-        :fullscreen="true"
-        class="main-content"
-      >
+        </header>
         <main class="page-shell">
           <component :is="activeView" />
         </main>
@@ -30,7 +27,7 @@
 
 <script>
 import { markRaw } from 'vue';
-import { IonApp, IonContent, IonPage, IonToolbar } from '@ionic/vue';
+import { IonApp, IonContent, IonPage } from '@ionic/vue';
 import BottomNav from './components/BottomNav.vue';
 import EventsView from './components/EventsView.vue';
 import FairPlayView from './components/FairPlayView.vue';
@@ -54,7 +51,6 @@ export default {
     IonApp,
     IonContent,
     IonPage,
-    IonToolbar,
     BottomNav,
   },
   provide() {
