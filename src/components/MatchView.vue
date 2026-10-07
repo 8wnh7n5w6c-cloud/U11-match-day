@@ -181,7 +181,7 @@
     </div>
   </div>
   <div
-    v-if="matchActive"
+    v-if="matchActive || (!matchSaved && (homeScore || awayScore || events.length))"
     class="award-row"
   >
     <label>Man of the match<ion-select
@@ -190,7 +190,7 @@
       placeholder="Choose"
       aria-label="Man of the match"
     ><ion-select-option
-      v-for="name in availablePlayers"
+      v-for="name in matchParticipants"
       :key="name"
       :value="name"
     >{{ name }}</ion-select-option></ion-select></label><label>Parents’ player<ion-select
@@ -199,7 +199,7 @@
       placeholder="Choose"
       aria-label="Parents’ player of the match"
     ><ion-select-option
-      v-for="name in availablePlayers"
+      v-for="name in matchParticipants"
       :key="name"
       :value="name"
     >{{ name }}</ion-select-option></ion-select></label>
@@ -258,6 +258,6 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']),
+  ...pitchPalView(['opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'matchParticipants', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']),
 };
 </script>

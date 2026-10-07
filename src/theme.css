@@ -175,19 +175,24 @@ ion-card.season-score::part(native) { background: #fff; color: #172238; }
 .season-hero { display: grid; gap: 8px; margin: 0 0 18px; padding: 21px; border-radius: 22px; color: white; background: #101b31; }
 .season-hero strong { font-size: 26px; letter-spacing: -.04em; }
 .season-hero span { color: #aeb9cc; font-size: 11px; }
-.season-table { padding: 5px 15px !important; }
-.season-player { display: flex; align-items: center; gap: 9px; min-height: 53px; border-bottom: 1px solid #eef0f4; font-size: 11px; }
-.season-player:last-child { border: 0; }
-.season-player .avatar { width: 31px; height: 31px; flex-basis: 31px; border-radius: 11px; font-size: 10px; }
-.season-player b { flex: 1; font-size: 12px; }
-.season-player span:not(.avatar) { color: #5b687d; font-size: 10px; }
-.season-player strong { font-size: 11px; }
-.history-row { display: flex; align-items: center; gap: 11px; min-height: 61px; border-bottom: 1px solid #eef0f4; }
+.season-overview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 18px; }
+.stats-sort { display: flex; align-items: center; gap: 5px; color: #5d6b80; font-size: 10px; font-weight: 750; }
+.stats-sort ion-select { min-width: 94px; font-size: 11px; }
+.stats-table-wrap { overflow-x: auto; }
+.season-stats { width: 100%; min-width: 760px; border-collapse: collapse; color: #172238; font-size: 10px; }
+.season-stats th,.season-stats td { padding: 9px 7px; border-bottom: 1px solid #eef0f4; text-align: right; white-space: nowrap; }
+.season-stats thead th { color: #5d6b80; font-size: 9px; font-weight: 850; letter-spacing: .04em; }
+.season-stats th:first-child,.season-stats td:first-child { text-align: left; }
+.season-stats tbody th { font-size: 11px; font-weight: 750; }
+.history-row { display: grid; grid-template-columns: 31px minmax(0, 1fr) auto; align-items: center; gap: 8px 11px; min-height: 61px; padding: 10px 0; border-bottom: 1px solid #eef0f4; }
 .history-row:last-child { border: 0; }
 .history-result { display: grid; place-items: center; width: 31px; height: 31px; border-radius: 10px; font-size: 12px; font-weight: 900; }
 .history-result.w { color: #147649; background: #dff8e8; }.history-result.l { color: #b33643; background: #ffeaeb; }.history-result.d { color: #785000; background: #fff3d9; }
 .history-info { display: grid; flex: 1; gap: 4px; }.history-info b { font-size: 12px; }.history-info small { color: #5b687d; font-size: 10px; }
 .history-row > strong { font-size: 13px; }
+.history-meta,.match-lineup-details { grid-column: 1 / -1; color: #5b687d; font-size: 10px; line-height: 1.5; }
+.match-lineup-details summary { padding: 5px 0; color: #4052c2; font-weight: 750; cursor: pointer; }
+.match-lineup-details div { padding: 3px 0; }
 .danger-button { --color: #cc4450; margin: 12px 0; font-size: 11px; text-transform: none; }
 .empty-state { padding: 18px 8px; color: #5b687d; text-align: center; font-size: 11px; }
 .bottom-nav { position: absolute; z-index: 10; right: 0; bottom: 0; left: 0; display: flex; justify-content: space-around; padding: 9px 7px max(env(safe-area-inset-bottom), 10px); border-top: 1px solid #e9ecf1; background: #ffffffed; backdrop-filter: blur(18px); }
