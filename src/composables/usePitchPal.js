@@ -4,24 +4,6 @@ import { buildSeasonRows, fairnessColor, scoreEvenness } from '../domain/fairnes
 const defaultPlayers = ['Oscar', 'Samuel', 'Parker', 'Finlay', 'Jacob', 'Cyrus', 'Harry', 'Ronnie', 'Jaisane', 'Josh'];
 const positionsList = ['GK', 'LB', 'RB', 'LM', 'CM', 'RM', 'ST'];
 const formations = ['2-3-1', '3-2-1', '2-2-2', '3-3'];
-const teamColours = [
-  { value: 'green-light', label: 'Light green', background: '#bbf7d0', foreground: '#052e16' },
-  { value: 'blue-light', label: 'Light blue', background: '#bfdbfe', foreground: '#172554' },
-  { value: 'blue-dark', label: 'Dark blue', background: '#1e3a8a', foreground: '#ffffff' },
-  { value: 'red-light', label: 'Light red', background: '#fecaca', foreground: '#450a0a' },
-  { value: 'red-dark', label: 'Dark red', background: '#991b1b', foreground: '#ffffff' },
-  { value: 'green-dark', label: 'Dark green', background: '#166534', foreground: '#ffffff' },
-  { value: 'yellow-light', label: 'Light yellow', background: '#fef08a', foreground: '#422006' },
-  { value: 'yellow-dark', label: 'Dark yellow', background: '#854d0e', foreground: '#ffffff' },
-  { value: 'orange-light', label: 'Light orange', background: '#fed7aa', foreground: '#431407' },
-  { value: 'orange-dark', label: 'Dark orange', background: '#c2410c', foreground: '#ffffff' },
-  { value: 'purple-light', label: 'Light purple', background: '#e9d5ff', foreground: '#3b0764' },
-  { value: 'purple-dark', label: 'Dark purple', background: '#6b21a8', foreground: '#ffffff' },
-  { value: 'pink-light', label: 'Light pink', background: '#fbcfe8', foreground: '#500724' },
-  { value: 'pink-dark', label: 'Dark pink', background: '#9d174d', foreground: '#ffffff' },
-  { value: 'gray-light', label: 'Light gray', background: '#e2e8f0', foreground: '#0f172a' },
-  { value: 'gray-dark', label: 'Dark gray', background: '#334155', foreground: '#ffffff' },
-];
 
 function readJson(key, fallback) {
   try {
@@ -38,12 +20,16 @@ function createPlayerStats() {
 
 export function usePitchPal() {
   const players = ref(readJson('playerNames', defaultPlayers));
-  if (players.value.length !== 10) players.value = defaultPlayers;
+  if (!Array.isArray(players.value) || !players.value.length) players.value = defaultPlayers;
 
   const data = reactive(readJson('u11v5', { matches: [], p: {}, availability: {}, lineups: [], saved: [], gameSplit: 'quarters' }));
   data.matches ||= [];
   data.p ||= {};
   data.availability ||= {};
+  if ('teamColor' in data) {
+    delete data.teamColor;
+    localStorage.setItem('u11v5', JSON.stringify(data));
+  }
   data.lineups ||= [];
   players.value.forEach((name) => {
     data.p[name] ||= createPlayerStats();
@@ -54,10 +40,9 @@ export function usePitchPal() {
   const periodType = ref(data.gameSplit === 'halves' ? 'halves' : 'quarters');
   const periodLength = ref(Number(data.periodLength || 12.5));
   const teamName = ref(data.teamName || '');
-  const teamColor = ref(data.teamColor || 'green-light');
   const opponent = ref('');
   const formation = ref('2-3-1');
-  const tab = ref('Setup');
+  const tab = ref('Team profile');
   const quarter = ref(1);
   const starters = ref([]);
   const playerPositions = ref({});
@@ -119,11 +104,124 @@ export function usePitchPal() {
     data.gameSplit = periodType.value;
     data.periodLength = periodLength.value;
     data.teamName = teamName.value.trim();
-    data.teamColor = teamColor.value;
     data.captain = captain.value;
     data.lineups = savedLineups;
     localStorage.setItem('u11v5', JSON.stringify(data));
     localStorage.setItem('playerNames', JSON.stringify(players.value));
+  }
+
+  function addPlayer(value) {
+    const name = String(value || '').trim();
+    if (!name) return false;
+    if (players.value.some((player) => player.toLocaleLowerCase() === name.toLocaleLowerCase())) {
+      window.alert('A player with that name is already in the squad.');
+      return false;
+    }
+
+    players.value.push(name);
+    data.p[name] ||= createPlayerStats();
+    data.availability[name] ??= true;
+    seconds[name] ??= 0;
+    defensiveSeconds[name] ??= 0;
+    persist();
+    return true;
+  }
+
+  function renamePlayer(currentName, value) {
+    const name = String(value || '').trim();
+    if (!name) {
+      let number = Math.max(0, players.value.indexOf(currentName)) + 1;
+      while (players.value.some((player) => player.toLocaleLowerCase() === `player ${number}` && player !== currentName)
+        || currentName.toLocaleLowerCase() === `player ${number}`) number++;
+      return renamePlayer(currentName, `Player ${number}`);
+    }
+    if (players.value.some((player) => player !== currentName && player.toLocaleLowerCase() === name.toLocaleLowerCase())) {
+      window.alert('A player with that name is already in the squad.');
+      return false;
+    }
+    if (name === currentName) return true;
+
+    const renameKey = (record) => {
+      if (!record || !Object.prototype.hasOwnProperty.call(record, currentName)) return;
+      record[name] = record[currentName];
+      delete record[currentName];
+    };
+    const renameArray = (names) => (names || []).map((player) => player === currentName ? name : player);
+    const renameLineup = (lineup) => {
+      if (!lineup) return;
+      lineup.starters = renameArray(lineup.starters);
+      renameKey(lineup.positions);
+      if (lineup.captain === currentName) lineup.captain = name;
+    };
+
+    renameKey(data.p);
+    renameKey(data.availability);
+    renameKey(seconds);
+    renameKey(defensiveSeconds);
+    renameKey(availableAtStart.value);
+    savedLineups.forEach(renameLineup);
+    starters.value = renameArray(starters.value);
+    renameKey(playerPositions.value);
+    if (captain.value === currentName) captain.value = name;
+    if (dedicatedGK.value === currentName) dedicatedGK.value = name;
+    if (selectedOut.value === currentName) selectedOut.value = name;
+    if (selectedIn.value === currentName) selectedIn.value = name;
+    if (goalScorer.value === currentName) goalScorer.value = name;
+    if (goalAssist.value === currentName) goalAssist.value = name;
+    matchGoalCredits.value.forEach((credit) => {
+      if (credit.scorer === currentName) credit.scorer = name;
+      if (credit.assist === currentName) credit.assist = name;
+    });
+    events.value = events.value.map((event) => event.split(currentName).join(name));
+
+    data.matches.forEach((match) => {
+      renameKey(match.playerMinutes);
+      renameKey(match.matchAvailability);
+      ['captain', 'motm', 'potm', 'dedicatedGK'].forEach((key) => {
+        if (match[key] === currentName) match[key] = name;
+      });
+      match.starters = renameArray(match.starters);
+      (match.quarterLineups || []).forEach(renameLineup);
+      if (match.events) match.events = match.events.map((event) => event.split(currentName).join(name));
+    });
+    if (data.captain === currentName) data.captain = name;
+    if (data.dedicatedGK === currentName) data.dedicatedGK = name;
+
+    players.value[players.value.indexOf(currentName)] = name;
+    persist();
+    return true;
+  }
+
+  function removePlayer(name) {
+    if (!players.value.includes(name)) return false;
+
+    players.value = players.value.filter((player) => player !== name);
+    delete data.p[name];
+    delete data.availability[name];
+    delete seconds[name];
+    delete defensiveSeconds[name];
+    delete availableAtStart.value[name];
+    starters.value = starters.value.filter((player) => player !== name);
+    delete playerPositions.value[name];
+    savedLineups.forEach((lineup) => {
+      if (!lineup) return;
+      lineup.starters = lineup.starters.filter((player) => player !== name);
+      delete lineup.positions[name];
+      if (lineup.captain === name) lineup.captain = '';
+    });
+    if (captain.value === name) captain.value = '';
+    if (dedicatedGK.value === name) dedicatedGK.value = '';
+    if (data.captain === name) data.captain = '';
+    if (data.dedicatedGK === name) data.dedicatedGK = '';
+    if (selectedOut.value === name) selectedOut.value = '';
+    if (selectedIn.value === name) selectedIn.value = '';
+    if (goalScorer.value === name) goalScorer.value = '';
+    if (goalAssist.value === name) goalAssist.value = '';
+    if (motm.value === name) motm.value = '';
+    if (potm.value === name) potm.value = '';
+    matchGoalCredits.value = matchGoalCredits.value.filter((credit) => credit.scorer !== name && credit.assist !== name);
+    persist();
+    return true;
   }
 
   function rememberLineup() {
@@ -471,7 +569,6 @@ export function usePitchPal() {
   watch(data, persist, { deep: true });
   watch(players, persist, { deep: true });
   watch(teamName, persist);
-  watch(teamColor, persist);
   watch([secondsLeft, homeScore, awayScore, matchActive], () => {
     if (matchActive.value) {
       localStorage.setItem('pitchPalMatch', JSON.stringify({
@@ -503,12 +600,12 @@ export function usePitchPal() {
   }
 
   return {
-    players, data, positionsList, formations, teamColours, periodType, periodLength, teamName, teamColor, opponent, formation, tab, dedicatedGK,
+    players, data, positionsList, formations, periodType, periodLength, teamName, opponent, formation, tab, dedicatedGK,
     quarter, starters, playerPositions, captain, seconds, events, homeScore, awayScore, secondsLeft,
     matchActive, matchReady, periodRunning, matchSaved, selectedOut, selectedIn, goalScorer, goalAssist, motm, potm,
     periodCount, periodName, availablePlayers, matchParticipants, bench, activePlayers, substitutionCandidates, currentPeriodTitle, matchRows,
     matchFairness, matchPriority, recommendedMinutes, seasonRows, seasonFairness, goalDiff, recordText,
-    resultLabel, clockText: formatClock, changePeriod, selectPlayer, setPlayerPosition, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, beginMatch, restartMatch,
+    resultLabel, clockText: formatClock, addPlayer, renamePlayer, removePlayer, changePeriod, selectPlayer, setPlayerPosition, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, beginMatch, restartMatch,
     toggleClock, nextPeriod, finishMatch, registerGoal, addOpponentGoal, chooseSubstitutionPlayer, substitute, saveMatch,
     clearSeason, rememberLineup, formatClock, formatMinutes, periodLabel, playerInitial,
     restoreMatch, dispose: stopClock, fairnessColor,

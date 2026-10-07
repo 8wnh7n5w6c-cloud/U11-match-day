@@ -112,7 +112,7 @@
         >
           {{ match.result || '—' }}
         </div><div class="history-info">
-          <b>{{ match.teamName || teamName || 'Your team' }} vs {{ match.opponent }}</b><small>{{ new Date(match.date).toLocaleDateString() }}</small>
+          <b>{{ match.teamName || teamName || 'Your squad' }} vs {{ match.opponent }}</b><small>{{ new Date(match.date).toLocaleDateString() }}</small>
         </div><strong>{{ match.score }}–{{ match.against }}</strong>
         <div class="history-meta">
           {{ match.periodType === 'halves' ? '2 halves' : '4 quarters' }} · {{ match.formation || 'Formation not recorded' }} · Captain: {{ match.captain || '—' }}

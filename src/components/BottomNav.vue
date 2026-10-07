@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       items: [
+        { name: 'Team profile', icon: '◎' },
         { name: 'Setup', icon: '⌂' },
         { name: 'Squad', icon: '◉' },
         { name: 'Match', icon: '◷' },

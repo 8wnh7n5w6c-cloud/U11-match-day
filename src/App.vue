@@ -1,5 +1,5 @@
 <template>
-  <IonApp :style="teamColorStyle">
+  <IonApp>
     <IonPage>
       <IonContent class="main-content">
         <header class="topbar">
@@ -35,9 +35,11 @@ import MatchView from './components/MatchView.vue';
 import SeasonView from './components/SeasonView.vue';
 import SetupView from './components/SetupView.vue';
 import SquadView from './components/SquadView.vue';
+import TeamProfileView from './components/TeamProfileView.vue';
 import { usePitchPal } from './composables/usePitchPal.js';
 
 const views = {
+  'Team profile': TeamProfileView,
   Setup: SetupView,
   Squad: SquadView,
   Match: MatchView,
@@ -67,24 +69,6 @@ export default {
     };
   },
   computed: {
-    teamColorStyle() {
-      const selection = this.pitchPal.teamColours.find((colour) => colour.value === this.pitchPal.teamColor.value);
-      const background = selection?.background || '#bbf7d0';
-      const foreground = selection?.foreground || '#052e16';
-      const toRgb = (hex) => hex.match(/[\da-f]{2}/gi).map((channel) => Number.parseInt(channel, 16)).join(', ');
-      return {
-        '--team-player-color': background,
-        '--team-player-text': foreground,
-        '--team-accent': background,
-        '--team-accent-contrast': foreground,
-        '--ion-color-primary': background,
-        '--ion-color-primary-rgb': toRgb(background),
-        '--ion-color-primary-contrast': foreground,
-        '--ion-color-primary-contrast-rgb': toRgb(foreground),
-        '--ion-color-primary-shade': background,
-        '--ion-color-primary-tint': background,
-      };
-    },
     activeView() {
       return views[this.pitchPal.tab.value] || SetupView;
     },

@@ -108,7 +108,7 @@
     </ion-select>
   </div>
   <div class="captain-panel">
-    <div><span class="eyebrow">LEAD THE TEAM</span><strong>Match captain</strong></div><ion-select
+    <div><span class="eyebrow">LEAD THE SQUAD</span><strong>Match captain</strong></div><ion-select
       v-model="captain"
       interface="popover"
       placeholder="Choose captain"

@@ -13,12 +13,12 @@
   <ion-card class="score-card">
     <ion-card-content>
       <div class="score-labels">
-        <span>{{ teamName || 'YOUR TEAM' }}</span><span>{{ opponent || 'OPPONENT' }}</span>
+        <span>{{ teamName || 'YOUR SQUAD' }}</span><span>{{ opponent || 'OPPONENT' }}</span>
       </div>
       <div
         class="scoreline"
         role="group"
-        :aria-label="`${homeScore} goals for ${teamName || 'your team'}, ${awayScore} goals for ${opponent || 'the opponents'}`"
+        :aria-label="`${homeScore} goals for ${teamName || 'your squad'}, ${awayScore} goals for ${opponent || 'the opponents'}`"
       >
         <strong>{{ homeScore }}</strong><span aria-hidden="true">:</span><strong>{{ awayScore }}</strong>
       </div>

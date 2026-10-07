@@ -1,45 +1,5 @@
 <template>
   <div class="setup-section-title">
-    <h2>Set up your <span>team.</span></h2>
-  </div>
-  <ion-card class="surface-card">
-    <ion-card-content>
-      <p class="setup-card-description">Team details stay saved for every match.</p>
-      <ion-label
-        class="field-label"
-        for="team-name-input"
-      >
-        Your team name
-      </ion-label><ion-input
-        id="team-name-input"
-        v-model="teamName"
-        placeholder="e.g. Riverside United"
-        class="input-control"
-        aria-label="Your team name"
-        autocomplete="organization"
-      />
-      <ion-label
-        id="team-colour-label"
-        class="field-label spaced"
-      >
-        Team colour
-      </ion-label><ion-select
-        v-model="teamColor"
-        interface="popover"
-        class="input-control"
-        aria-labelledby="team-colour-label"
-      >
-        <ion-select-option
-          v-for="colour in teamColours"
-          :key="colour.value"
-          :value="colour.value"
-        >
-          {{ colour.label }}
-        </ion-select-option>
-      </ion-select>
-    </ion-card-content>
-  </ion-card>
-  <div class="setup-section-title">
     <h2>Set up your next <span>match.</span></h2>
   </div>
   <ion-card class="surface-card">
@@ -129,7 +89,7 @@
     Build your squad <span aria-hidden="true">→</span>
   </ion-button>
   <div class="section-heading">
-    <div><span class="eyebrow">THE SEASON</span><h2>Your team so far</h2></div><button
+    <div><span class="eyebrow">THE SEASON</span><h2>Your squad so far</h2></div><button
       type="button"
       class="text-link"
       @click="tab = 'Season'"
@@ -174,6 +134,6 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['teamName', 'teamColor', 'teamColours', 'opponent', 'periodType', 'periodLength', 'periodCount', 'formation', 'formations', 'availablePlayers', 'data', 'recordText', 'goalDiff', 'tab'], ['switchSplit']),
+  ...pitchPalView(['opponent', 'periodType', 'periodLength', 'periodCount', 'formation', 'formations', 'availablePlayers', 'data', 'recordText', 'goalDiff', 'tab'], ['switchSplit']),
 };
 </script>
