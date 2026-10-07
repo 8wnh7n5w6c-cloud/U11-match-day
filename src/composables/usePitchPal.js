@@ -202,8 +202,10 @@ export function usePitchPal() {
     if (!starters.value.includes(name)) return;
     if (name === dedicatedGK.value && position !== 'GK') return;
     if (position === 'GK' && dedicatedGK.value && name !== dedicatedGK.value) return;
-    const alreadyAssigned = starters.value.some((starter) => starter !== name && playerPositions.value[starter] === position);
-    if (position && alreadyAssigned) return;
+    const occupant = position && starters.value.find((starter) => starter !== name && playerPositions.value[starter] === position);
+    if (occupant) {
+      playerPositions.value[occupant] = playerPositions.value[name] || '';
+    }
     playerPositions.value[name] = position || '';
     rememberLineup();
   }

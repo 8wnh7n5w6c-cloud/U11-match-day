@@ -74,7 +74,6 @@
           v-for="pos in positionsList"
           :key="pos"
           :value="pos"
-          :disabled="pos !== playerPositions[name] && starters.some((otherName) => otherName !== name && playerPositions[otherName] === pos)"
         >{{ pos }}</ion-select-option></ion-select></span>
         <button
           class="availability-toggle"
