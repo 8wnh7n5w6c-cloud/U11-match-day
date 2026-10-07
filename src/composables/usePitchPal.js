@@ -279,12 +279,22 @@ export function usePitchPal() {
     matchGoalCredits.value = [];
     goalScorer.value = '';
     goalAssist.value = '';
+    selectedOut.value = '';
+    selectedIn.value = '';
+    motm.value = '';
+    potm.value = '';
     matchActive.value = true;
     matchSaved.value = false;
     periodRunning.value = true;
     resetTimer();
     tab.value = 'Match';
     runClock();
+  }
+
+  function restartMatch() {
+    if (!window.confirm('Restart this match from the beginning? The current score, clock, and events will be reset. Saved season results will remain.')) return;
+    stopClock();
+    beginMatch();
   }
 
   function toggleClock() {
@@ -431,7 +441,7 @@ export function usePitchPal() {
     matchActive, periodRunning, matchSaved, selectedOut, selectedIn, goalScorer, goalAssist, motm, potm,
     periodCount, periodName, availablePlayers, bench, activePlayers, substitutionCandidates, currentPeriodTitle, matchRows,
     matchFairness, matchPriority, recommendedMinutes, seasonRows, seasonFairness, goalDiff, recordText,
-    resultLabel, clockText: formatClock, changePeriod, selectPlayer, setPlayerPosition, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, beginMatch,
+    resultLabel, clockText: formatClock, changePeriod, selectPlayer, setPlayerPosition, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, beginMatch, restartMatch,
     toggleClock, nextPeriod, finishMatch, registerGoal, addOpponentGoal, substitute, saveMatch,
     clearSeason, rememberLineup, formatClock, formatMinutes, periodLabel, playerInitial,
     restoreMatch, dispose: stopClock, fairnessColor,

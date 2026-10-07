@@ -40,6 +40,15 @@
         >
           {{ !matchActive ? '▶ Start match' : periodRunning ? 'Ⅱ Pause' : '▶ Resume' }}
         </ion-button>
+        <ion-button
+          v-if="matchActive || matchSaved || events.length || homeScore || awayScore"
+          fill="clear"
+          class="quiet-button"
+          aria-label="Restart match from the beginning"
+          @click="restartMatch"
+        >
+          ↻ Restart match
+        </ion-button>
       </div>
       <div
         v-if="matchActive"
@@ -249,6 +258,6 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['opponent', 'matchActive', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']),
+  ...pitchPalView(['opponent', 'matchActive', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']),
 };
 </script>
