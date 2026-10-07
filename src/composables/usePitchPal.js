@@ -37,7 +37,7 @@ export function usePitchPal() {
   const periodLength = ref(Number(data.periodLength || 12.5));
   const opponent = ref('');
   const formation = ref('2-3-1');
-  const tab = ref('Squad');
+  const tab = ref('Setup');
   const quarter = ref(1);
   const starters = ref([]);
   const playerPositions = ref({});
@@ -331,7 +331,6 @@ export function usePitchPal() {
     matchActive.value = false;
     matchReady.value = false;
     events.value.unshift(secondsLeft.value ? `Match finished early · ${formatClock(secondsLeft.value)} left` : 'Full time');
-    tab.value = 'Match';
   }
 
   function registerGoal() {
@@ -465,7 +464,6 @@ export function usePitchPal() {
     matchGoalCredits.value = recovered.goalCredits || [];
     availableAtStart.value = recovered.availableAtStart || {};
     matchActive.value = true;
-    tab.value = 'Match';
   }
 
   return {
