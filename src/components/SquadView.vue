@@ -86,6 +86,24 @@
       </div>
     </ion-card-content>
   </ion-card>
+  <div class="captain-panel keeper-panel">
+    <div><span class="eyebrow">GOALKEEPER</span><strong>Dedicated keeper</strong></div><ion-select
+      :value="dedicatedGK"
+      interface="popover"
+      aria-label="Dedicated goalkeeper"
+      @ion-change="setDedicatedGK($event.detail.value || '')"
+    >
+      <ion-select-option value="">
+        No dedicated keeper
+      </ion-select-option><ion-select-option
+        v-for="name in availablePlayers"
+        :key="name"
+        :value="name"
+      >
+        {{ name }}
+      </ion-select-option>
+    </ion-select>
+  </div>
   <div class="captain-panel">
     <div><span class="eyebrow">LEAD THE TEAM</span><strong>Match captain</strong></div><ion-select
       v-model="captain"
@@ -133,6 +151,6 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['players', 'periodCount', 'periodLabel', 'quarter', 'starters', 'formation', 'formations', 'playerPositions', 'positionsList', 'data', 'playerInitial', 'captain', 'availablePlayers'], ['changePeriod', 'selectPlayer', 'toggleAvailability', 'setCaptain', 'beginMatch', 'rememberLineup']),
+  ...pitchPalView(['players', 'periodCount', 'periodLabel', 'quarter', 'starters', 'formation', 'formations', 'playerPositions', 'positionsList', 'data', 'playerInitial', 'captain', 'dedicatedGK', 'availablePlayers'], ['changePeriod', 'selectPlayer', 'toggleAvailability', 'setCaptain', 'setDedicatedGK', 'beginMatch', 'rememberLineup']),
 };
 </script>

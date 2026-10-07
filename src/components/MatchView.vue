@@ -119,7 +119,7 @@
           aria-label="Player going off"
         >
           <ion-select-option
-            v-for="name in activePlayers"
+            v-for="name in substitutionCandidates"
             :key="name"
             :value="name"
           >
@@ -249,6 +249,6 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['opponent', 'matchActive', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'activePlayers', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']),
+  ...pitchPalView(['opponent', 'matchActive', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']),
 };
 </script>
