@@ -245,9 +245,10 @@ ion-card.season-score::part(native) { background: #fff; color: #172238; }
 .match-lineup-details div { padding: 3px 0; }
 .danger-button { --color: #cc4450; margin: 12px 0; font-size: 11px; text-transform: none; }
 .empty-state { padding: 18px 8px; color: #5b687d; text-align: center; font-size: 11px; }
-.bottom-nav { position: absolute; z-index: 10; right: 0; bottom: 0; left: 0; display: flex; justify-content: space-around; padding: 9px 7px max(env(safe-area-inset-bottom), 10px); border-top: 1px solid #e9ecf1; background: #ffffffed; backdrop-filter: blur(18px); }
-.bottom-nav button { display: grid; justify-items: center; gap: 3px; min-width: 52px; padding: 4px 6px; border: 0; color: #5b687d; background: transparent; font: inherit; }
-.bottom-nav button.active { color: #4052c2; }
+.bottom-nav { position: absolute; z-index: 10; right: 0; bottom: 0; left: 0; display: flex; justify-content: space-around; gap: 5px; padding: 9px 7px max(env(safe-area-inset-bottom), 10px); border-top: 1px solid #e9ecf1; background: #ffffffed; backdrop-filter: blur(18px); }
+.bottom-nav button { display: grid; flex: 1; justify-items: center; gap: 3px; min-width: 52px; min-height: 51px; padding: 5px 4px; border: 0; border-radius: 12px; color: #e1e7f0; background: #26344d; font: inherit; transition: background-color .15s ease, color .15s ease, transform .15s ease; }
+.bottom-nav button.active { color: #102419; background: #a7f3b7; box-shadow: 0 3px 9px #101b3129; }
+.bottom-nav button:active { transform: translateY(1px); }
 .nav-icon { display: grid; place-items: center; height: 22px; font-size: 19px; line-height: 1; }
 .bottom-nav small { font-size: 10px; font-weight: 750; }
 @media (min-width: 600px) { .page-shell { padding-top: 32px; } .bottom-nav { right: calc((100% - min(100%, 680px))/2); left: calc((100% - min(100%, 680px))/2); } }
