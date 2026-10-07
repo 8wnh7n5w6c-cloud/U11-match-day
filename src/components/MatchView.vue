@@ -109,6 +109,94 @@
       </ion-button>
     </ion-card-content>
   </ion-card>
+  <div class="section-heading compact">
+    <div><span class="eyebrow">MATCH LINEUP</span><h2>On the pitch</h2></div>
+    <span class="lineup-count">{{ starters.length }}/7</span>
+  </div>
+  <div
+    v-if="starters.length"
+    class="match-pitch"
+    role="group"
+    :aria-label="`${formation} formation on the pitch`"
+  >
+    <div
+      class="pitch-halfway"
+      aria-hidden="true"
+    />
+    <div
+      class="pitch-centre-circle"
+      aria-hidden="true"
+    />
+    <div
+      class="pitch-box pitch-box-top"
+      aria-hidden="true"
+    />
+    <div
+      class="pitch-box pitch-box-bottom"
+      aria-hidden="true"
+    />
+    <div
+      v-for="(name, index) in starters"
+      :key="name"
+      class="pitch-player"
+      :class="pitchPlayerState(name)"
+      :style="pitchPositionStyle(name, index)"
+      :aria-label="`${name}, ${playerPositions[name] || 'position not set'}, ${formatMinutes(seconds[name])} minutes${name === recommendedSubOut && bench.length && matchActive ? ', suggested to come off' : ''}`"
+    >
+      <span class="pitch-initials">{{ playerInitial(name) }}</span>
+      <span class="pitch-position">{{ playerPositions[name] || '—' }}</span>
+      <span class="pitch-name">{{ name }}</span>
+      <span
+        v-if="name === recommendedSubOut && bench.length && matchActive"
+        class="pitch-state-label"
+      >SUB OFF</span>
+      <span
+        v-else-if="name === dedicatedGK"
+        class="pitch-state-label"
+      >KEEPER</span>
+    </div>
+  </div>
+  <div
+    v-if="matchActive && !matchReady && bench.length"
+    class="fair-play-legend"
+    aria-label="Fair play key"
+  >
+    <span><i class="status-dot status-green" />Next on</span>
+    <span><i class="status-dot status-red" />Suggested off</span>
+  </div>
+  <div class="bench-section">
+    <div class="bench-heading">
+      <div><span class="eyebrow">SUBSTITUTES</span><h2>Bench</h2></div><span>{{ bench.length }} available</span>
+    </div>
+    <div
+      v-if="bench.length"
+      class="bench-list"
+    >
+      <div
+        v-for="name in bench"
+        :key="name"
+        class="bench-player"
+        :class="matchActive && !matchReady && name === matchPriority ? 'status-green' : 'status-neutral'"
+      >
+        <span class="bench-initials">{{ playerInitial(name) }}</span>
+        <span class="bench-player-info"><b>{{ name }}</b><small>{{ formatMinutes(seconds[name]) }} min played</small></span>
+        <span
+          v-if="matchActive && !matchReady && name === matchPriority"
+          class="bench-state-label"
+        >NEXT ON</span>
+        <span
+          v-else
+          class="bench-state-label"
+        >SUB</span>
+      </div>
+    </div>
+    <div
+      v-else
+      class="bench-empty"
+    >
+      No available substitutes.
+    </div>
+  </div>
   <div
     v-if="matchActive && bench.length"
     class="section-heading compact"
@@ -250,7 +338,20 @@ import {
 } from '@ionic/vue';
 import { pitchPalView } from '../mixins/pitchPalView.js';
 
+const matchPitchLayouts = {
+  '2-3-1': { GK: [50, 88], LB: [30, 70], RB: [70, 70], LM: [19, 49], CM: [50, 49], RM: [81, 49], ST: [50, 20] },
+  '3-2-1': { GK: [50, 88], LB: [23, 70], CM: [50, 70], RB: [77, 70], LM: [35, 48], RM: [65, 48], ST: [50, 20] },
+  '2-2-2': { GK: [50, 88], LB: [32, 68], RB: [68, 68], LM: [32, 46], RM: [68, 46], CM: [32, 22], ST: [68, 22] },
+  '3-3': { GK: [50, 88], LB: [23, 67], CM: [50, 67], RB: [77, 67], LM: [23, 27], RM: [50, 27], ST: [77, 27] },
+};
+
+const matchView = pitchPalView(
+  ['opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'matchParticipants', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events', 'formation', 'playerPositions', 'dedicatedGK', 'matchPriority'],
+  ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial'],
+);
+
 export default {
+  ...matchView,
   components: {
     IonButton,
     IonCard,
@@ -258,6 +359,27 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'matchParticipants', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']),
+  computed: {
+    ...matchView.computed,
+    recommendedSubOut() {
+      if (!this.matchActive || this.matchReady || !this.bench.length) return '';
+      return [...this.substitutionCandidates]
+        .sort((a, b) => (this.seconds[b] || 0) - (this.seconds[a] || 0))[0] || '';
+    },
+  },
+  methods: {
+    ...matchView.methods,
+    pitchPositionStyle(name, index) {
+      const layout = matchPitchLayouts[this.formation] || matchPitchLayouts['2-3-1'];
+      const position = this.playerPositions[name];
+      const coords = layout[position] || [15 + ((index % 3) * 35), 25 + (Math.floor(index / 3) * 25)];
+      return { left: `${coords[0]}%`, top: `${coords[1]}%` };
+    },
+    pitchPlayerState(name) {
+      if (!this.matchActive) return name === this.dedicatedGK ? 'pitch-player-keeper' : 'pitch-player-idle';
+      if (name === this.recommendedSubOut && this.bench.length) return 'pitch-player-off';
+      return 'pitch-player-playing';
+    },
+  },
 };
 </script>
