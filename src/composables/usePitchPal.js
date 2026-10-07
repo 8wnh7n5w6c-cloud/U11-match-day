@@ -120,6 +120,7 @@ export function usePitchPal() {
       if (!captain.value && lineup.captain) captain.value = lineup.captain;
     }
     ensureDedicatedKeeper();
+    normalizeLineupPositions();
   }
 
   function ensureDedicatedKeeper() {
@@ -133,7 +134,23 @@ export function usePitchPal() {
       }
       if (starters.value.length < 7) starters.value.push(keeper);
     }
+    starters.value.forEach((name) => {
+      if (name !== keeper && playerPositions.value[name] === 'GK') playerPositions.value[name] = '';
+    });
     playerPositions.value[keeper] = 'GK';
+  }
+
+  function normalizeLineupPositions() {
+    const seen = new Set();
+    const orderedStarters = dedicatedGK.value
+      ? [dedicatedGK.value, ...starters.value.filter((name) => name !== dedicatedGK.value)]
+      : starters.value;
+    orderedStarters.forEach((name) => {
+      const position = playerPositions.value[name];
+      if (!position) return;
+      if (seen.has(position)) playerPositions.value[name] = '';
+      else seen.add(position);
+    });
   }
 
   function setDedicatedGK(name) {
@@ -176,8 +193,18 @@ export function usePitchPal() {
       delete playerPositions.value[name];
     } else if (starters.value.length < 7 && data.availability[name]) {
       starters.value.push(name);
-      playerPositions.value[name] = positionsList[starters.value.length - 1] || '';
+      playerPositions.value[name] = positionsList.find((position) => !starters.value.some((starter) => starter !== name && playerPositions.value[starter] === position)) || '';
     }
+    rememberLineup();
+  }
+
+  function setPlayerPosition(name, position) {
+    if (!starters.value.includes(name)) return;
+    if (name === dedicatedGK.value && position !== 'GK') return;
+    if (position === 'GK' && dedicatedGK.value && name !== dedicatedGK.value) return;
+    const alreadyAssigned = starters.value.some((starter) => starter !== name && playerPositions.value[starter] === position);
+    if (position && alreadyAssigned) return;
+    playerPositions.value[name] = position || '';
     rememberLineup();
   }
 
@@ -387,7 +414,7 @@ export function usePitchPal() {
     matchActive, periodRunning, matchSaved, selectedOut, selectedIn, goalScorer, goalAssist, motm, potm,
     periodCount, periodName, availablePlayers, bench, activePlayers, substitutionCandidates, currentPeriodTitle, matchRows,
     matchFairness, matchPriority, recommendedMinutes, seasonRows, seasonFairness, goalDiff, recordText,
-    resultLabel, clockText: formatClock, changePeriod, selectPlayer, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, beginMatch,
+    resultLabel, clockText: formatClock, changePeriod, selectPlayer, setPlayerPosition, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, beginMatch,
     toggleClock, nextPeriod, finishMatch, registerGoal, addOpponentGoal, substitute, saveMatch,
     clearSeason, rememberLineup, formatClock, formatMinutes, periodLabel, playerInitial,
     restoreMatch, dispose: stopClock, fairnessColor,

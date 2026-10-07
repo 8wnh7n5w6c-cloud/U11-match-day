@@ -66,13 +66,15 @@
           v-if="starters.includes(name)"
           class="position-tag"
         ><ion-select
-          v-model="playerPositions[name]"
+          :value="playerPositions[name]"
           interface="popover"
           :aria-label="`${name} position`"
+          @ion-change="setPlayerPosition(name, $event.detail.value)"
         ><ion-select-option
           v-for="pos in positionsList"
           :key="pos"
           :value="pos"
+          :disabled="pos !== playerPositions[name] && starters.some((otherName) => otherName !== name && playerPositions[otherName] === pos)"
         >{{ pos }}</ion-select-option></ion-select></span>
         <button
           class="availability-toggle"
@@ -151,6 +153,6 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['players', 'periodCount', 'periodLabel', 'quarter', 'starters', 'formation', 'formations', 'playerPositions', 'positionsList', 'data', 'playerInitial', 'captain', 'dedicatedGK', 'availablePlayers'], ['changePeriod', 'selectPlayer', 'toggleAvailability', 'setCaptain', 'setDedicatedGK', 'beginMatch', 'rememberLineup']),
+  ...pitchPalView(['players', 'periodCount', 'periodLabel', 'quarter', 'starters', 'formation', 'formations', 'playerPositions', 'positionsList', 'data', 'playerInitial', 'captain', 'dedicatedGK', 'availablePlayers'], ['changePeriod', 'selectPlayer', 'toggleAvailability', 'setCaptain', 'setDedicatedGK', 'setPlayerPosition', 'beginMatch', 'rememberLineup']),
 };
 </script>
