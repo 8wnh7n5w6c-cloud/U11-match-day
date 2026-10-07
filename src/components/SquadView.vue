@@ -57,7 +57,7 @@
           <span
             class="avatar"
             :class="{ 'avatar-on': starters.includes(name) }"
-          >{{ playerInitial(name) }}</span><span class="roster-name"><b>{{ name }}</b><small>{{ !data.availability[name] ? 'Unavailable' : starters.includes(name) ? (playerPositions[name] || 'Starter') : 'Available' }}</small></span><span
+          >{{ playerInitial(name) }}</span><span class="roster-name"><b>{{ name }}</b><small>{{ !data.availability[name] ? 'Unavailable' : starters.includes(name) ? (playerPositions[name] || 'Starter') : starters.length === 7 ? 'Sub' : 'Available' }}</small></span><span
             class="select-mark"
             aria-hidden="true"
           >{{ starters.includes(name) ? '✓' : '+' }}</span>
