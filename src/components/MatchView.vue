@@ -8,7 +8,7 @@
       v-if="matchActive"
       class="live-pill"
       role="status"
-    ><i aria-hidden="true" />{{ periodRunning ? 'LIVE' : 'PAUSED' }}</span>
+    ><i aria-hidden="true" />{{ periodRunning ? 'LIVE' : matchReady ? 'READY' : 'PAUSED' }}</span>
   </div>
   <ion-card class="score-card">
     <ion-card-content>
@@ -38,7 +38,7 @@
           class="primary-button"
           @click="matchActive ? toggleClock() : beginMatch()"
         >
-          {{ !matchActive ? '▶ Start match' : periodRunning ? 'Ⅱ Pause' : '▶ Resume' }}
+          {{ !matchActive || matchReady ? '▶ Start match' : periodRunning ? 'Ⅱ Pause' : '▶ Resume' }}
         </ion-button>
         <ion-button
           v-if="matchActive || matchSaved || events.length || homeScore || awayScore"
@@ -258,6 +258,6 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['opponent', 'matchActive', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']),
+  ...pitchPalView(['opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events'], ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'playerPositions']),
 };
 </script>

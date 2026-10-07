@@ -50,6 +50,7 @@ export function usePitchPal() {
   const awayScore = ref(0);
   const secondsLeft = ref(Math.round(periodLength.value * 60));
   const matchActive = ref(false);
+  const matchReady = ref(false);
   const periodRunning = ref(false);
   const matchSaved = ref(false);
   const selectedOut = ref('');
@@ -262,7 +263,7 @@ export function usePitchPal() {
     }, 1000);
   }
 
-  function beginMatch() {
+  function beginMatch(startImmediately = true) {
     if (starters.value.length !== 7) {
       window.alert('Choose seven starters in Squad before kick-off.');
       tab.value = 'Squad';
@@ -284,22 +285,25 @@ export function usePitchPal() {
     motm.value = '';
     potm.value = '';
     matchActive.value = true;
+    matchReady.value = !startImmediately;
     matchSaved.value = false;
-    periodRunning.value = true;
+    periodRunning.value = startImmediately;
     resetTimer();
     tab.value = 'Match';
-    runClock();
+    if (startImmediately) runClock();
+    else stopClock();
   }
 
   function restartMatch() {
     if (!window.confirm('Restart this match from the beginning? The current score, clock, and events will be reset. Saved season results will remain.')) return;
     stopClock();
-    beginMatch();
+    beginMatch(false);
   }
 
   function toggleClock() {
     if (periodRunning.value) stopClock();
     else if (matchActive.value && secondsLeft.value > 0) {
+      matchReady.value = false;
       periodRunning.value = true;
       runClock();
     }
@@ -319,6 +323,7 @@ export function usePitchPal() {
   function finishMatch() {
     stopClock();
     matchActive.value = false;
+    matchReady.value = false;
     events.value.unshift(secondsLeft.value ? `Match finished early · ${formatClock(secondsLeft.value)} left` : 'Full time');
     tab.value = 'Match';
   }
@@ -438,7 +443,7 @@ export function usePitchPal() {
   return {
     players, data, positionsList, formations, periodType, periodLength, opponent, formation, tab, dedicatedGK,
     quarter, starters, playerPositions, captain, seconds, events, homeScore, awayScore, secondsLeft,
-    matchActive, periodRunning, matchSaved, selectedOut, selectedIn, goalScorer, goalAssist, motm, potm,
+    matchActive, matchReady, periodRunning, matchSaved, selectedOut, selectedIn, goalScorer, goalAssist, motm, potm,
     periodCount, periodName, availablePlayers, bench, activePlayers, substitutionCandidates, currentPeriodTitle, matchRows,
     matchFairness, matchPriority, recommendedMinutes, seasonRows, seasonFairness, goalDiff, recordText,
     resultLabel, clockText: formatClock, changePeriod, selectPlayer, setPlayerPosition, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, beginMatch, restartMatch,
