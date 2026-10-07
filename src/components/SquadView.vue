@@ -128,7 +128,7 @@
     expand="block"
     class="primary-button"
     :disabled="starters.length !== 7"
-    @click="beginMatch"
+    @click="beginMatch(false)"
   >
     {{ starters.length === 7 ? 'Ready for kick-off' : `Choose ${7 - starters.length} more` }} <span aria-hidden="true">→</span>
   </ion-button>
