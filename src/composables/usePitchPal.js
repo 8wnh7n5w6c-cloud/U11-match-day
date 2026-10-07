@@ -199,14 +199,29 @@ export function usePitchPal() {
   }
 
   function setPlayerPosition(name, position) {
-    if (!starters.value.includes(name)) return;
+    if (!data.availability[name]) return;
     if (name === dedicatedGK.value && position !== 'GK') return;
     if (position === 'GK' && dedicatedGK.value && name !== dedicatedGK.value) return;
+    const currentIndex = starters.value.indexOf(name);
+    if (!position) {
+      if (name === dedicatedGK.value) return;
+      if (currentIndex !== -1) starters.value.splice(currentIndex, 1);
+      delete playerPositions.value[name];
+      rememberLineup();
+      return;
+    }
     const occupant = position && starters.value.find((starter) => starter !== name && playerPositions.value[starter] === position);
-    if (occupant) {
+    if (currentIndex === -1) {
+      if (occupant) {
+        const occupantIndex = starters.value.indexOf(occupant);
+        starters.value.splice(occupantIndex, 1, name);
+        delete playerPositions.value[occupant];
+      } else if (starters.value.length < 7) starters.value.push(name);
+      else return;
+    } else if (occupant) {
       playerPositions.value[occupant] = playerPositions.value[name] || '';
     }
-    playerPositions.value[name] = position || '';
+    playerPositions.value[name] = position;
     rememberLineup();
   }
 

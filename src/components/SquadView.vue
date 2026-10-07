@@ -63,17 +63,19 @@
           >{{ starters.includes(name) ? '✓' : '+' }}</span>
         </button>
         <span
-          v-if="starters.includes(name)"
+          v-if="data.availability[name]"
           class="position-tag"
         ><ion-select
           :value="playerPositions[name]"
           interface="popover"
-          :aria-label="`${name} position`"
+          :placeholder="starters.includes(name) ? 'Position' : 'Assign position'"
+          :aria-label="`${name} position and lineup assignment`"
           @ion-change="setPlayerPosition(name, $event.detail.value)"
         ><ion-select-option
           v-for="pos in positionsList"
           :key="pos"
           :value="pos"
+          :disabled="pos === 'GK' && dedicatedGK && name !== dedicatedGK"
         >{{ pos }}</ion-select-option></ion-select></span>
         <button
           class="availability-toggle"
