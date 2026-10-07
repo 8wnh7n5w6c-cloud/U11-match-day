@@ -4,6 +4,24 @@ import { buildSeasonRows, fairnessColor, scoreEvenness } from '../domain/fairnes
 const defaultPlayers = ['Oscar', 'Samuel', 'Parker', 'Finlay', 'Jacob', 'Cyrus', 'Harry', 'Ronnie', 'Jaisane', 'Josh'];
 const positionsList = ['GK', 'LB', 'RB', 'LM', 'CM', 'RM', 'ST'];
 const formations = ['2-3-1', '3-2-1', '2-2-2', '3-3'];
+const teamColours = [
+  { value: 'blue-light', label: 'Light blue', background: '#bfdbfe', foreground: '#172554' },
+  { value: 'blue-dark', label: 'Dark blue', background: '#1e3a8a', foreground: '#ffffff' },
+  { value: 'red-light', label: 'Light red', background: '#fecaca', foreground: '#450a0a' },
+  { value: 'red-dark', label: 'Dark red', background: '#991b1b', foreground: '#ffffff' },
+  { value: 'green-light', label: 'Light green', background: '#bbf7d0', foreground: '#052e16' },
+  { value: 'green-dark', label: 'Dark green', background: '#166534', foreground: '#ffffff' },
+  { value: 'yellow-light', label: 'Light yellow', background: '#fef08a', foreground: '#422006' },
+  { value: 'yellow-dark', label: 'Dark yellow', background: '#854d0e', foreground: '#ffffff' },
+  { value: 'orange-light', label: 'Light orange', background: '#fed7aa', foreground: '#431407' },
+  { value: 'orange-dark', label: 'Dark orange', background: '#c2410c', foreground: '#ffffff' },
+  { value: 'purple-light', label: 'Light purple', background: '#e9d5ff', foreground: '#3b0764' },
+  { value: 'purple-dark', label: 'Dark purple', background: '#6b21a8', foreground: '#ffffff' },
+  { value: 'pink-light', label: 'Light pink', background: '#fbcfe8', foreground: '#500724' },
+  { value: 'pink-dark', label: 'Dark pink', background: '#9d174d', foreground: '#ffffff' },
+  { value: 'gray-light', label: 'Light gray', background: '#e2e8f0', foreground: '#0f172a' },
+  { value: 'gray-dark', label: 'Dark gray', background: '#334155', foreground: '#ffffff' },
+];
 
 function readJson(key, fallback) {
   try {
@@ -36,6 +54,7 @@ export function usePitchPal() {
   const periodType = ref(data.gameSplit === 'halves' ? 'halves' : 'quarters');
   const periodLength = ref(Number(data.periodLength || 12.5));
   const teamName = ref(data.teamName || '');
+  const teamColor = ref(data.teamColor || 'green-light');
   const opponent = ref('');
   const formation = ref('2-3-1');
   const tab = ref('Setup');
@@ -100,6 +119,7 @@ export function usePitchPal() {
     data.gameSplit = periodType.value;
     data.periodLength = periodLength.value;
     data.teamName = teamName.value.trim();
+    data.teamColor = teamColor.value;
     data.captain = captain.value;
     data.lineups = savedLineups;
     localStorage.setItem('u11v5', JSON.stringify(data));
@@ -451,6 +471,7 @@ export function usePitchPal() {
   watch(data, persist, { deep: true });
   watch(players, persist, { deep: true });
   watch(teamName, persist);
+  watch(teamColor, persist);
   watch([secondsLeft, homeScore, awayScore, matchActive], () => {
     if (matchActive.value) {
       localStorage.setItem('pitchPalMatch', JSON.stringify({
@@ -482,7 +503,7 @@ export function usePitchPal() {
   }
 
   return {
-    players, data, positionsList, formations, periodType, periodLength, teamName, opponent, formation, tab, dedicatedGK,
+    players, data, positionsList, formations, teamColours, periodType, periodLength, teamName, teamColor, opponent, formation, tab, dedicatedGK,
     quarter, starters, playerPositions, captain, seconds, events, homeScore, awayScore, secondsLeft,
     matchActive, matchReady, periodRunning, matchSaved, selectedOut, selectedIn, goalScorer, goalAssist, motm, potm,
     periodCount, periodName, availablePlayers, matchParticipants, bench, activePlayers, substitutionCandidates, currentPeriodTitle, matchRows,

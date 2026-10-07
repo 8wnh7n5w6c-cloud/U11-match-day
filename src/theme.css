@@ -10,6 +10,8 @@
   --ion-color-primary-tint: #8ef0a3;
   --ion-color-secondary: #6274e8;
   --ion-color-tertiary: #f7bf62;
+  --team-player-color: #bbf7d0;
+  --team-player-text: #052e16;
 }
 
 * { box-sizing: border-box; }
@@ -124,7 +126,8 @@ ion-select.input-control::part(container) { background: #f5f7fa; }
 .captain-panel ion-select::part(text) { color: #4052c2; }
 .goal-entry ion-select::part(container) { background: #1d2a42; color: #f5f7fa; }
 .goal-entry ion-button { min-height: 37px; margin: 0; }
-.quiet-button { --color: #d4dbea; font-size: 11px; font-weight: 700; text-transform: none; }
+.quiet-button { --background: #fff; --background-activated: #e6ebf2; --color: #101b31; --color-activated: #101b31; --border-radius: 10px; font-size: 11px; font-weight: 750; text-transform: none; }
+ion-button.quiet-button::part(native) { background: #fff; color: #101b31; border: 1px solid #d0d7e2; }
 .next-button { --background: #a7f3b7; --background-activated: #8de5a2; --color: #102419; --color-activated: #102419; margin: 7px 0 0; font-size: 12px; font-weight: 800; text-transform: none; }
 ion-button.next-button::part(native) { background: var(--background); color: #102419; }
 .lineup-count { color: #5d6b80; font-size: 12px; font-weight: 800; }
@@ -139,14 +142,14 @@ ion-button.next-button::part(native) { background: var(--background); color: #10
 .pitch-player { appearance: none; font: inherit; cursor: pointer; }
 .pitch-player:disabled { opacity: 1; cursor: default; }
 .pitch-player-selected { outline: 3px solid #101b31; outline-offset: 2px; }
-.pitch-player-playing { background: #ffedb5; }
+.pitch-player-playing { color: var(--team-player-text); background: var(--team-player-color); }
 .pitch-player-idle { background: #a7f3b7; }
 .pitch-player-off { background: #ffc2c6; border-color: #9a2937; }
 .pitch-player-keeper { background: #d9e3ff; }
 .pitch-initials { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 50%; color: #102419; background: #ffffffc9; font-size: 13px; font-weight: 900; }
-.pitch-position { position: absolute; top: 5px; right: 5px; color: #344157; font-size: 8px; font-weight: 900; }
+.pitch-position { position: absolute; top: 5px; right: 5px; color: var(--team-player-text); font-size: 8px; font-weight: 900; }
 .pitch-name { max-width: 78px; overflow: hidden; margin-top: 3px; font-size: 9px; font-weight: 850; text-overflow: ellipsis; white-space: nowrap; }
-.pitch-state-label { margin-top: 3px; color: #7d2530; font-size: 8px; font-weight: 950; letter-spacing: .04em; }
+.pitch-state-label { margin-top: 3px; padding: 2px 4px; border-radius: 5px; color: #7d2530; background: #fff; font-size: 8px; font-weight: 950; letter-spacing: .04em; }
 .pitch-player-keeper .pitch-state-label { color: #354fb7; }
 .fair-play-legend { display: flex; gap: 15px; margin: 0 2px 17px; color: #5d6b80; font-size: 10px; }
 .substitution-hint { margin: 0 1px 10px; color: #46536a; font-size: 11px; line-height: 1.45; }

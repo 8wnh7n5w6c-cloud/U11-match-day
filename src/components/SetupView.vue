@@ -18,6 +18,25 @@
         autocomplete="organization"
       />
       <ion-label
+        id="team-colour-label"
+        class="field-label spaced"
+      >
+        Team colour
+      </ion-label><ion-select
+        v-model="teamColor"
+        interface="popover"
+        class="input-control"
+        aria-labelledby="team-colour-label"
+      >
+        <ion-select-option
+          v-for="colour in teamColours"
+          :key="colour.value"
+          :value="colour.value"
+        >
+          {{ colour.label }}
+        </ion-select-option>
+      </ion-select>
+      <ion-label
         class="field-label spaced"
         for="opponent-input"
       >
@@ -146,6 +165,6 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['teamName', 'opponent', 'periodType', 'periodLength', 'periodCount', 'formation', 'formations', 'availablePlayers', 'data', 'recordText', 'goalDiff', 'tab'], ['switchSplit']),
+  ...pitchPalView(['teamName', 'teamColor', 'teamColours', 'opponent', 'periodType', 'periodLength', 'periodCount', 'formation', 'formations', 'availablePlayers', 'data', 'recordText', 'goalDiff', 'tab'], ['switchSplit']),
 };
 </script>

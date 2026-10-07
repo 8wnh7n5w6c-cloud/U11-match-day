@@ -1,5 +1,5 @@
 <template>
-  <IonApp>
+  <IonApp :style="teamColorStyle">
     <IonPage>
       <IonContent class="main-content">
         <header class="topbar">
@@ -67,6 +67,13 @@ export default {
     };
   },
   computed: {
+    teamColorStyle() {
+      const selection = this.pitchPal.teamColours.find((colour) => colour.value === this.pitchPal.teamColor.value);
+      return {
+        '--team-player-color': selection?.background || '#bbf7d0',
+        '--team-player-text': selection?.foreground || '#052e16',
+      };
+    },
     activeView() {
       return views[this.pitchPal.tab.value] || SetupView;
     },
