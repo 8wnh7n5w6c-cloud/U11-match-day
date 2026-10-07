@@ -68,7 +68,7 @@ import {
 import { pitchPalView } from '../mixins/pitchPalView.js';
 import { scoreEvenness } from '../domain/fairness.js';
 
-const view = pitchPalView(['matchFairness', 'seasonFairness', 'seasonRows', 'data'], ['fairnessColor']);
+const view = pitchPalView(['matchActive', 'events', 'matchFairness', 'seasonFairness', 'seasonRows', 'data'], ['fairnessColor']);
 
 export default {
   components: {
