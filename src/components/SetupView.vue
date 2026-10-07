@@ -1,9 +1,10 @@
 <template>
-  <div class="eyebrow">
-    MATCH DAY
-  </div><h1>Set up your<br><span>next match.</span></h1>
+  <div class="setup-section-title">
+    <h2>Set up your <span>team.</span></h2>
+  </div>
   <ion-card class="surface-card">
     <ion-card-content>
+      <p class="setup-card-description">Team details stay saved for every match.</p>
       <ion-label
         class="field-label"
         for="team-name-input"
@@ -36,8 +37,16 @@
           {{ colour.label }}
         </ion-select-option>
       </ion-select>
+    </ion-card-content>
+  </ion-card>
+  <div class="setup-section-title">
+    <h2>Set up your next <span>match.</span></h2>
+  </div>
+  <ion-card class="surface-card">
+    <ion-card-content>
+      <p class="setup-card-description">Choose an opponent and set the match format.</p>
       <ion-label
-        class="field-label spaced"
+        class="field-label"
         for="opponent-input"
       >
         Opponent

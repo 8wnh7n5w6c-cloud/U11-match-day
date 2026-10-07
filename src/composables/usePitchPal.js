@@ -5,11 +5,11 @@ const defaultPlayers = ['Oscar', 'Samuel', 'Parker', 'Finlay', 'Jacob', 'Cyrus',
 const positionsList = ['GK', 'LB', 'RB', 'LM', 'CM', 'RM', 'ST'];
 const formations = ['2-3-1', '3-2-1', '2-2-2', '3-3'];
 const teamColours = [
+  { value: 'green-light', label: 'Light green', background: '#bbf7d0', foreground: '#052e16' },
   { value: 'blue-light', label: 'Light blue', background: '#bfdbfe', foreground: '#172554' },
   { value: 'blue-dark', label: 'Dark blue', background: '#1e3a8a', foreground: '#ffffff' },
   { value: 'red-light', label: 'Light red', background: '#fecaca', foreground: '#450a0a' },
   { value: 'red-dark', label: 'Dark red', background: '#991b1b', foreground: '#ffffff' },
-  { value: 'green-light', label: 'Light green', background: '#bbf7d0', foreground: '#052e16' },
   { value: 'green-dark', label: 'Dark green', background: '#166534', foreground: '#ffffff' },
   { value: 'yellow-light', label: 'Light yellow', background: '#fef08a', foreground: '#422006' },
   { value: 'yellow-dark', label: 'Dark yellow', background: '#854d0e', foreground: '#ffffff' },

@@ -69,9 +69,20 @@ export default {
   computed: {
     teamColorStyle() {
       const selection = this.pitchPal.teamColours.find((colour) => colour.value === this.pitchPal.teamColor.value);
+      const background = selection?.background || '#bbf7d0';
+      const foreground = selection?.foreground || '#052e16';
+      const toRgb = (hex) => hex.match(/[\da-f]{2}/gi).map((channel) => Number.parseInt(channel, 16)).join(', ');
       return {
-        '--team-player-color': selection?.background || '#bbf7d0',
-        '--team-player-text': selection?.foreground || '#052e16',
+        '--team-player-color': background,
+        '--team-player-text': foreground,
+        '--team-accent': background,
+        '--team-accent-contrast': foreground,
+        '--ion-color-primary': background,
+        '--ion-color-primary-rgb': toRgb(background),
+        '--ion-color-primary-contrast': foreground,
+        '--ion-color-primary-contrast-rgb': toRgb(foreground),
+        '--ion-color-primary-shade': background,
+        '--ion-color-primary-tint': background,
       };
     },
     activeView() {

@@ -13,33 +13,22 @@
     These scores show how evenly playing time has been shared. They are not ratings of players or performance.
   </div>
   <ion-card class="surface-card">
-    <ion-card-header><ion-card-title>Today’s minutes</ion-card-title></ion-card-header><ion-card-content class="fair-list">
+    <ion-card-header><ion-card-title>Fairness by match</ion-card-title></ion-card-header><ion-card-content class="fair-list">
       <div
-        v-for="(player, index) in matchRows"
-        :key="player.name"
-        class="fair-row"
+        v-for="match in matchFairnessHistory"
+        :key="match.id"
+        class="fair-row match-fair-row"
       >
-        <span class="fair-name"><i
+        <span class="fair-name match-fair-info"><i
           aria-hidden="true"
-          :class="`traffic ${fairnessColor(index, matchRows.length)}`"
-        /><b>{{ player.name }}</b></span><strong>{{ Math.floor(player.seconds / 60) }} min</strong>
+          :class="`traffic ${match.color}`"
+        /><span><b>{{ match.opponent }}</b><small>{{ match.date }} · {{ match.score }}–{{ match.against }}</small></span></span><strong>{{ match.fairness === null ? '—' : `${match.fairness}%` }}</strong>
       </div>
       <div
-        v-if="!matchRows.length"
+        v-if="!matchFairnessHistory.length"
         class="empty-state"
       >
-        Start a match to track playing time.
-      </div>
-      <div
-        v-if="matchActive && matchPriority"
-        class="recommendation"
-      >
-        <div>
-          <span
-            class="traffic red"
-            aria-hidden="true"
-          /><strong>{{ matchPriority }} needs about {{ recommendedMinutes }} more {{ recommendedMinutes === 1 ? 'minute' : 'minutes' }}</strong>
-        </div><small>Recommended substitution: {{ matchPriority }} ON · {{ clockText(secondsLeft + (periodCount - quarter) * periodLength * 60) }} left in match</small>
+        Save a match to see its playing-time fairness.
       </div>
     </ion-card-content>
   </ion-card>
@@ -77,6 +66,9 @@ import {
   IonCardTitle,
 } from '@ionic/vue';
 import { pitchPalView } from '../mixins/pitchPalView.js';
+import { scoreEvenness } from '../domain/fairness.js';
+
+const view = pitchPalView(['matchFairness', 'seasonFairness', 'seasonRows', 'data'], ['fairnessColor']);
 
 export default {
   components: {
@@ -85,6 +77,34 @@ export default {
     IonCardHeader,
     IonCardTitle,
   },
-  ...pitchPalView(['matchActive', 'events', 'matchFairness', 'seasonFairness', 'matchRows', 'matchPriority', 'recommendedMinutes', 'secondsLeft', 'periodCount', 'quarter', 'periodLength', 'clockText', 'seasonRows', 'data'], ['fairnessColor']),
+  ...view,
+  computed: {
+    ...view.computed,
+    matchFairnessHistory() {
+      return (this.data.matches || []).map((match, index) => {
+        const availability = match.matchAvailability || {};
+        const minutes = Object.keys(availability)
+          .filter((name) => availability[name])
+          .map((name) => Number(match.playerMinutes?.[name] || 0));
+        const fairness = minutes.length && minutes.some((value) => value > 0)
+          ? scoreEvenness(minutes)
+          : null;
+        const parsedDate = new Date(match.date);
+        const date = Number.isNaN(parsedDate.getTime())
+          ? 'Date unavailable'
+          : new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' }).format(parsedDate);
+
+        return {
+          id: `${match.date || 'match'}-${index}`,
+          opponent: match.opponent || 'Unknown opponent',
+          date,
+          score: Number(match.score || 0),
+          against: Number(match.against || 0),
+          fairness,
+          color: fairness === null || fairness < 60 ? 'red' : fairness < 80 ? 'amber' : 'green',
+        };
+      });
+    },
+  },
 };
 </script>
