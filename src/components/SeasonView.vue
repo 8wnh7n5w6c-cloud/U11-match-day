@@ -112,7 +112,7 @@
         >
           {{ match.result || '—' }}
         </div><div class="history-info">
-          <b>{{ match.opponent }}</b><small>{{ new Date(match.date).toLocaleDateString() }}</small>
+          <b>{{ match.teamName || teamName || 'Your team' }} vs {{ match.opponent }}</b><small>{{ new Date(match.date).toLocaleDateString() }}</small>
         </div><strong>{{ match.score }}–{{ match.against }}</strong>
         <div class="history-meta">
           {{ match.periodType === 'halves' ? '2 halves' : '4 quarters' }} · {{ match.formation || 'Formation not recorded' }} · Captain: {{ match.captain || '—' }}
@@ -152,7 +152,7 @@
 import { IonButton, IonCard, IonCardContent, IonSelect, IonSelectOption } from '@ionic/vue';
 import { pitchPalView } from '../mixins/pitchPalView.js';
 
-const seasonView = pitchPalView(['recordText', 'goalDiff', 'players', 'data', 'playerInitial'], ['clearSeason']);
+const seasonView = pitchPalView(['recordText', 'goalDiff', 'players', 'data', 'teamName', 'playerInitial'], ['clearSeason']);
 
 export default {
   ...seasonView,

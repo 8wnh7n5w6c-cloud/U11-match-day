@@ -13,12 +13,12 @@
   <ion-card class="score-card">
     <ion-card-content>
       <div class="score-labels">
-        <span>YOUR TEAM</span><span>{{ opponent || 'OPPONENT' }}</span>
+        <span>{{ teamName || 'YOUR TEAM' }}</span><span>{{ opponent || 'OPPONENT' }}</span>
       </div>
       <div
         class="scoreline"
         role="group"
-        :aria-label="`${homeScore} goals for your team, ${awayScore} goals for ${opponent || 'the opponents'}`"
+        :aria-label="`${homeScore} goals for ${teamName || 'your team'}, ${awayScore} goals for ${opponent || 'the opponents'}`"
       >
         <strong>{{ homeScore }}</strong><span aria-hidden="true">:</span><strong>{{ awayScore }}</strong>
       </div>
@@ -316,7 +316,7 @@ const matchPitchLayouts = {
 };
 
 const matchView = pitchPalView(
-  ['opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'matchParticipants', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events', 'formation', 'playerPositions', 'dedicatedGK', 'matchPriority', 'matchRows'],
+  ['teamName', 'opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'matchParticipants', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events', 'formation', 'playerPositions', 'dedicatedGK', 'matchPriority', 'matchRows'],
   ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'chooseSubstitutionPlayer', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'fairnessColor'],
 );
 

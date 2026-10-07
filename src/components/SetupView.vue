@@ -6,6 +6,19 @@
     <ion-card-content>
       <ion-label
         class="field-label"
+        for="team-name-input"
+      >
+        Your team name
+      </ion-label><ion-input
+        id="team-name-input"
+        v-model="teamName"
+        placeholder="e.g. Riverside United"
+        class="input-control"
+        aria-label="Your team name"
+        autocomplete="organization"
+      />
+      <ion-label
+        class="field-label spaced"
         for="opponent-input"
       >
         Opponent
@@ -133,6 +146,6 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['opponent', 'periodType', 'periodLength', 'periodCount', 'formation', 'formations', 'availablePlayers', 'data', 'recordText', 'goalDiff', 'tab'], ['switchSplit']),
+  ...pitchPalView(['teamName', 'opponent', 'periodType', 'periodLength', 'periodCount', 'formation', 'formations', 'availablePlayers', 'data', 'recordText', 'goalDiff', 'tab'], ['switchSplit']),
 };
 </script>

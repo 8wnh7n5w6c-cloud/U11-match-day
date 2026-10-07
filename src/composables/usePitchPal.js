@@ -35,6 +35,7 @@ export function usePitchPal() {
   const savedLineups = data.lineups;
   const periodType = ref(data.gameSplit === 'halves' ? 'halves' : 'quarters');
   const periodLength = ref(Number(data.periodLength || 12.5));
+  const teamName = ref(data.teamName || '');
   const opponent = ref('');
   const formation = ref('2-3-1');
   const tab = ref('Setup');
@@ -98,6 +99,7 @@ export function usePitchPal() {
   function persist() {
     data.gameSplit = periodType.value;
     data.periodLength = periodLength.value;
+    data.teamName = teamName.value.trim();
     data.captain = captain.value;
     data.lineups = savedLineups;
     localStorage.setItem('u11v5', JSON.stringify(data));
@@ -404,6 +406,7 @@ export function usePitchPal() {
     data.matches.unshift({
       date: new Date().toISOString(),
       opponent: opponent.value.trim(),
+      teamName: teamName.value.trim(),
       score: homeScore.value,
       against: awayScore.value,
       result,
@@ -447,6 +450,7 @@ export function usePitchPal() {
 
   watch(data, persist, { deep: true });
   watch(players, persist, { deep: true });
+  watch(teamName, persist);
   watch([secondsLeft, homeScore, awayScore, matchActive], () => {
     if (matchActive.value) {
       localStorage.setItem('pitchPalMatch', JSON.stringify({
@@ -478,7 +482,7 @@ export function usePitchPal() {
   }
 
   return {
-    players, data, positionsList, formations, periodType, periodLength, opponent, formation, tab, dedicatedGK,
+    players, data, positionsList, formations, periodType, periodLength, teamName, opponent, formation, tab, dedicatedGK,
     quarter, starters, playerPositions, captain, seconds, events, homeScore, awayScore, secondsLeft,
     matchActive, matchReady, periodRunning, matchSaved, selectedOut, selectedIn, goalScorer, goalAssist, motm, potm,
     periodCount, periodName, availablePlayers, matchParticipants, bench, activePlayers, substitutionCandidates, currentPeriodTitle, matchRows,
