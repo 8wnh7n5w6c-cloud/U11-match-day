@@ -161,8 +161,9 @@
     class="fair-play-legend"
     aria-label="Fair play key"
   >
-    <span><i class="status-dot status-green" />Next on</span>
-    <span><i class="status-dot status-red" />Suggested off</span>
+    <span><i class="status-dot status-red" />Needs playing time</span>
+    <span><i class="status-dot status-amber" />Balanced</span>
+    <span><i class="status-dot status-green" />More minutes</span>
   </div>
   <div class="bench-section">
     <div class="bench-heading">
@@ -176,7 +177,7 @@
         v-for="name in bench"
         :key="name"
         class="bench-player"
-        :class="matchActive && !matchReady && name === matchPriority ? 'status-green' : 'status-neutral'"
+        :class="benchPlayerFairnessClass(name)"
       >
         <span class="bench-initials">{{ playerInitial(name) }}</span>
         <span class="bench-player-info"><b>{{ name }}</b><small>{{ formatMinutes(seconds[name]) }} min played</small></span>
@@ -184,6 +185,10 @@
           v-if="matchActive && !matchReady && name === matchPriority"
           class="bench-state-label"
         >NEXT ON</span>
+        <span
+          v-else-if="matchActive && !matchReady"
+          class="bench-state-label"
+        >{{ benchPlayerFairnessLabel(name) }}</span>
         <span
           v-else
           class="bench-state-label"
@@ -346,8 +351,8 @@ const matchPitchLayouts = {
 };
 
 const matchView = pitchPalView(
-  ['opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'matchParticipants', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events', 'formation', 'playerPositions', 'dedicatedGK', 'matchPriority'],
-  ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial'],
+  ['opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'matchParticipants', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events', 'formation', 'playerPositions', 'dedicatedGK', 'matchPriority', 'matchRows'],
+  ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'fairnessColor'],
 );
 
 export default {
@@ -379,6 +384,17 @@ export default {
       if (!this.matchActive) return name === this.dedicatedGK ? 'pitch-player-keeper' : 'pitch-player-idle';
       if (name === this.recommendedSubOut && this.bench.length) return 'pitch-player-off';
       return 'pitch-player-playing';
+    },
+    benchPlayerFairnessClass(name) {
+      if (!this.matchActive || this.matchReady) return 'status-neutral';
+      const playerIndex = this.matchRows.findIndex((player) => player.name === name);
+      return `status-${this.fairnessColor(playerIndex, this.matchRows.length)}`;
+    },
+    benchPlayerFairnessLabel(name) {
+      if (name === this.matchPriority) return 'NEXT ON';
+      const playerIndex = this.matchRows.findIndex((player) => player.name === name);
+      const color = this.fairnessColor(playerIndex, this.matchRows.length);
+      return color === 'red' ? 'NEEDS TIME' : color === 'green' ? 'MORE MINUTES' : 'BALANCED';
     },
   },
 };

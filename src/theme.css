@@ -148,7 +148,7 @@ ion-button.next-button::part(native) { background: var(--background); color: #10
 .fair-play-legend { display: flex; gap: 15px; margin: 0 2px 17px; color: #5d6b80; font-size: 10px; }
 .fair-play-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .status-dot { width: 9px; height: 9px; border-radius: 50%; }
-.status-dot.status-green { background: #168354; }.status-dot.status-red { background: #b62c3d; }
+.status-dot.status-green { background: #168354; }.status-dot.status-red { background: #b62c3d; }.status-dot.status-amber { background: #8a5a00; }
 .bench-section { margin: 12px 0 18px; }
 .bench-heading { display: flex; align-items: end; justify-content: space-between; margin-bottom: 9px; }
 .bench-heading h2 { margin-top: 4px; }
@@ -156,13 +156,19 @@ ion-button.next-button::part(native) { background: var(--background); color: #10
 .bench-list { display: grid; gap: 7px; }
 .bench-player { display: flex; align-items: center; gap: 10px; min-height: 53px; padding: 7px 11px; border: 1px solid #e8ebf1; border-radius: 14px; background: white; }
 .bench-player.status-green { border-color: #80d8a0; background: #edf9f0; }
+.bench-player.status-amber { border-color: #e8ca83; background: #fff9e9; }
+.bench-player.status-red { border-color: #efb0b6; background: #fff1f2; }
 .bench-initials { display: grid; place-items: center; width: 35px; height: 35px; flex: 0 0 35px; border-radius: 11px; color: #122337; background: #e9edf3; font-size: 13px; font-weight: 850; }
 .bench-player.status-green .bench-initials { background: #b8edc6; }
+.bench-player.status-amber .bench-initials { background: #fae5ae; }
+.bench-player.status-red .bench-initials { background: #f8cdd1; }
 .bench-player-info { display: grid; flex: 1; gap: 3px; }
 .bench-player-info b { color: #172238; font-size: 12px; }
 .bench-player-info small { color: #5d6b80; font-size: 10px; }
 .bench-state-label { color: #5b687d; font-size: 9px; font-weight: 900; letter-spacing: .06em; }
 .bench-player.status-green .bench-state-label { color: #176944; }
+.bench-player.status-amber .bench-state-label { color: #765000; }
+.bench-player.status-red .bench-state-label { color: #9b2635; }
 .bench-empty { padding: 14px; border-radius: 14px; color: #5d6b80; background: #fff; font-size: 11px; text-align: center; }
 .sub-controls { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; color: #5d6b80; }
 .sub-controls ion-select { --background: #f5f7fa; --color: #172238; min-height: 45px; padding: 8px; border-radius: 11px; background: #f5f7fa; font-size: 11px; }
