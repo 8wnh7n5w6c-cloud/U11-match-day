@@ -67,6 +67,9 @@ export function usePitchPal() {
   const motm = ref('');
   const potm = ref('');
   let timer;
+  let lastTickAt = 0;
+  let wakeLock = null;
+  let visibilityHandler = null;
 
   const periodCount = computed(() => periodType.value === 'quarters' ? 4 : 2);
   const periodName = computed(() => periodType.value === 'quarters' ? 'Quarter' : 'Half');
@@ -373,20 +376,62 @@ export function usePitchPal() {
     if (timer) clearInterval(timer);
     timer = undefined;
     periodRunning.value = false;
+    releaseWakeLock();
+  }
+
+  function tickClock() {
+    const now = Date.now();
+    const elapsed = Math.floor((now - lastTickAt) / 1000);
+    if (elapsed > 0) {
+      lastTickAt = now;
+      if (secondsLeft.value > 0) {
+        secondsLeft.value = Math.max(0, secondsLeft.value - elapsed);
+        starters.value.forEach((name) => {
+          seconds[name] = (seconds[name] || 0) + elapsed;
+          if (['GK', 'LB', 'RB'].includes(playerPositions.value[name])) defensiveSeconds[name] = (defensiveSeconds[name] || 0) + elapsed;
+        });
+      }
+      if (secondsLeft.value <= 0) stopClock();
+    }
   }
 
   function runClock() {
     if (timer) clearInterval(timer);
-    timer = setInterval(() => {
-      if (secondsLeft.value > 0) {
-        secondsLeft.value--;
-        starters.value.forEach((name) => {
-          seconds[name] = (seconds[name] || 0) + 1;
-          if (['GK', 'LB', 'RB'].includes(playerPositions.value[name])) defensiveSeconds[name] = (defensiveSeconds[name] || 0) + 1;
-        });
-      } else stopClock();
-    }, 1000);
+    lastTickAt = Date.now();
+    timer = setInterval(tickClock, 1000);
+    tickClock();
+    acquireWakeLock();
   }
+
+  function acquireWakeLock() {
+    if (typeof navigator === 'undefined' || !('wakeLock' in navigator)) return;
+    if (!matchActive.value || !periodRunning.value) return;
+    if (document?.visibilityState !== 'visible') return;
+    navigator.wakeLock.request('screen').then((lock) => {
+      wakeLock = lock;
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    }).catch(() => {});
+  }
+
+  function releaseWakeLock() {
+    if (wakeLock) {
+      wakeLock.release();
+      wakeLock = null;
+    }
+  }
+
+  function setupLifecycle() {
+    visibilityHandler = () => {
+      if (document.visibilityState === 'visible') {
+        if (periodRunning.value && timer) {
+          tickClock();
+          acquireWakeLock();
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', visibilityHandler);
+  }
+  setupLifecycle();
 
   function beginMatch(startImmediately = true) {
     if (starters.value.length !== 7) {
@@ -566,6 +611,12 @@ export function usePitchPal() {
   function periodLabel(index) { return periodType.value === 'quarters' ? `Q${index + 1}` : `H${index + 1}`; }
   function playerInitial(name) { return name.trim().slice(0, 1).toUpperCase(); }
 
+  function dispose() {
+    stopClock();
+    releaseWakeLock();
+    if (visibilityHandler) document.removeEventListener('visibilitychange', visibilityHandler);
+  }
+
   watch(data, persist, { deep: true });
   watch(players, persist, { deep: true });
   watch(teamName, persist);
@@ -608,6 +659,6 @@ export function usePitchPal() {
     resultLabel, clockText: formatClock, addPlayer, renamePlayer, removePlayer, changePeriod, selectPlayer, setPlayerPosition, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, beginMatch, restartMatch,
     toggleClock, nextPeriod, finishMatch, registerGoal, addOpponentGoal, chooseSubstitutionPlayer, substitute, saveMatch,
     clearSeason, rememberLineup, formatClock, formatMinutes, periodLabel, playerInitial,
-    restoreMatch, dispose: stopClock, fairnessColor,
+    restoreMatch, dispose, fairnessColor,
   };
 }
