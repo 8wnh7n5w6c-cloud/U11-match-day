@@ -12,8 +12,8 @@ const formationPositionOrder = {
   '2-2-2': ['GK', 'LB', 'RB', 'LM', 'RM', 'CM', 'ST'],
   '3-3': ['GK', 'LB', 'CM', 'RB', 'LM', 'RM', 'ST'],
   '3-3-2': ['GK', 'LB', 'CB', 'RB', 'LM', 'CM', 'RM', 'ST', 'CF'],
-  '2-4-2': ['GK', 'LB', 'RB', 'LM', 'CB', 'CM', 'RM', 'ST', 'CF'],
-  '2-3-3': ['GK', 'LB', 'RB', 'LM', 'CM', 'RM', 'CB', 'ST', 'CF'],
+  '2-4-2': ['GK', 'LB', 'RB', 'LM', 'CDM', 'CM', 'RM', 'CAM', 'ST'],
+  '2-3-3': ['GK', 'LB', 'RB', 'LM', 'CM', 'RM', 'LW', 'ST', 'RW'],
 };
 
 function readJson(key, fallback) {
@@ -92,7 +92,7 @@ export function usePitchPal() {
   });
   const positionsList = computed(() => {
     if (squadSize.value === 5) return ['GK', 'CB', 'LB', 'RB', 'LM', 'RM', 'CM', 'ST', 'LST', 'RST'];
-    if (squadSize.value === 9) return ['GK', 'LB', 'CB', 'RB', 'LM', 'CM', 'RM', 'ST', 'CF'];
+    if (squadSize.value === 9) return ['GK', 'LB', 'CB', 'RB', 'LM', 'CDM', 'CM', 'RM', 'CAM', 'ST', 'CF', 'LW', 'RW'];
     return ['GK', 'LB', 'RB', 'LM', 'CM', 'RM', 'ST'];
   });
   const formationPositions = computed(() => {
@@ -448,7 +448,7 @@ export function usePitchPal() {
         secondsLeft.value = Math.max(0, secondsLeft.value - elapsed);
         starters.value.forEach((name) => {
           seconds[name] = (seconds[name] || 0) + elapsed;
-          if (['GK', 'LB', 'CB', 'RB'].includes(playerPositions.value[name])) defensiveSeconds[name] = (defensiveSeconds[name] || 0) + elapsed;
+          if (['GK', 'LB', 'CB', 'RB', 'CDM'].includes(playerPositions.value[name])) defensiveSeconds[name] = (defensiveSeconds[name] || 0) + elapsed;
         });
       }
       if (secondsLeft.value <= 0) stopClock();
