@@ -73,11 +73,35 @@
           </ion-select>
         </div>
       </div>
+      <div class="setup-row">
+        <ion-label
+          id="squad-size-label"
+          class="field-label spaced"
+        >
+          Squad size
+        </ion-label>
+        <ion-segment
+          :value="String(squadSize)"
+          aria-labelledby="squad-size-label"
+          @ion-change="setSquadSize($event.detail.value)"
+        >
+          <ion-segment-button value="5">
+            <ion-label>5-a-side</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="7">
+            <ion-label>7-a-side</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="9">
+            <ion-label>9-a-side</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
       <div class="setup-note">
         <span
           class="live-dot"
           aria-hidden="true"
-        /><span>{{ availablePlayers.length }} players available · {{ periodCount * periodLength }} minutes total</span>
+        />
+        <span>{{ availablePlayers.length }} players available · {{ periodCount * periodLength }} minutes total</span>
       </div>
     </ion-card-content>
   </ion-card>
@@ -134,6 +158,6 @@ export default {
     IonSelect,
     IonSelectOption,
   },
-  ...pitchPalView(['opponent', 'periodType', 'periodLength', 'periodCount', 'formation', 'formations', 'availablePlayers', 'data', 'recordText', 'goalDiff', 'tab'], ['switchSplit']),
+  ...pitchPalView(['opponent', 'periodType', 'periodLength', 'periodCount', 'formation', 'formations', 'squadSize', 'availablePlayers', 'data', 'recordText', 'goalDiff', 'tab'], ['switchSplit', 'setSquadSize']),
 };
 </script>

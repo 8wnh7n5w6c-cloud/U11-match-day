@@ -111,7 +111,7 @@
   </ion-card>
   <div class="section-heading compact">
     <div><span class="eyebrow">MATCH LINEUP</span><h2>On the pitch</h2></div>
-    <span class="lineup-count">{{ starters.length }}/7</span>
+    <span class="lineup-count">{{ starters.length }}/{{ squadSize }}</span>
   </div>
   <p
     v-if="matchActive && bench.length"
@@ -313,10 +313,16 @@ const matchPitchLayouts = {
   '3-2-1': { GK: [50, 88], LB: [23, 70], CM: [50, 70], RB: [77, 70], LM: [35, 48], RM: [65, 48], ST: [50, 20] },
   '2-2-2': { GK: [50, 88], LB: [32, 68], RB: [68, 68], LM: [32, 46], RM: [68, 46], CM: [32, 22], ST: [68, 22] },
   '3-3': { GK: [50, 88], LB: [23, 67], CM: [50, 67], RB: [77, 67], LM: [23, 27], RM: [50, 27], ST: [77, 27] },
+  '1-2-1': { GK: [50, 90], CB: [50, 58], LM: [25, 38], RM: [75, 38], ST: [50, 12] },
+  '2-1-1': { GK: [50, 90], LB: [32, 58], RB: [68, 58], CM: [50, 38], ST: [50, 12] },
+  '1-1-2': { GK: [50, 90], CB: [50, 58], CM: [50, 38], LST: [30, 12], RST: [70, 12] },
+  '3-3-2': { GK: [50, 92], LB: [25, 74], CB: [50, 74], RB: [75, 74], LM: [20, 50], CM: [50, 50], RM: [80, 50], ST: [35, 24], CF: [65, 24] },
+  '2-4-2': { GK: [50, 92], LB: [30, 74], RB: [70, 74], LM: [10, 50], CB: [35, 50], CM: [65, 50], RM: [90, 50], ST: [35, 24], CF: [65, 24] },
+  '2-3-3': { GK: [50, 92], LB: [30, 74], RB: [70, 74], LM: [20, 52], CM: [50, 52], RM: [80, 52], CB: [35, 26], ST: [50, 26], CF: [65, 26] },
 };
 
 const matchView = pitchPalView(
-  ['teamName', 'opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'matchParticipants', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events', 'formation', 'playerPositions', 'dedicatedGK', 'matchPriority', 'matchRows'],
+  ['teamName', 'opponent', 'matchActive', 'matchReady', 'currentPeriodTitle', 'tab', 'periodRunning', 'homeScore', 'awayScore', 'clockText', 'secondsLeft', 'periodCount', 'quarter', 'goalScorer', 'goalAssist', 'availablePlayers', 'matchParticipants', 'periodName', 'bench', 'starters', 'selectedOut', 'selectedIn', 'substitutionCandidates', 'seconds', 'motm', 'potm', 'matchSaved', 'resultLabel', 'events', 'formation', 'playerPositions', 'dedicatedGK', 'matchPriority', 'matchRows', 'squadSize'],
   ['toggleClock', 'beginMatch', 'restartMatch', 'registerGoal', 'addOpponentGoal', 'nextPeriod', 'chooseSubstitutionPlayer', 'substitute', 'saveMatch', 'formatMinutes', 'playerInitial', 'fairnessColor'],
 );
 

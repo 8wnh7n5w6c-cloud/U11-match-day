@@ -2,8 +2,19 @@ import { computed, reactive, ref, watch } from 'vue';
 import { buildSeasonRows, fairnessColor, scoreEvenness } from '../domain/fairness.js';
 
 const defaultPlayers = ['Oscar', 'Samuel', 'Parker', 'Finlay', 'Jacob', 'Cyrus', 'Harry', 'Ronnie', 'Jaisane', 'Josh'];
-const positionsList = ['GK', 'LB', 'RB', 'LM', 'CM', 'RM', 'ST'];
-const formations = ['2-3-1', '3-2-1', '2-2-2', '3-3'];
+
+const formationPositionOrder = {
+  '1-2-1': ['GK', 'CB', 'LM', 'RM', 'ST'],
+  '2-1-1': ['GK', 'LB', 'RB', 'CM', 'ST'],
+  '1-1-2': ['GK', 'CB', 'CM', 'LST', 'RST'],
+  '2-3-1': ['GK', 'LB', 'RB', 'LM', 'CM', 'RM', 'ST'],
+  '3-2-1': ['GK', 'LB', 'RB', 'LM', 'RM', 'CM', 'ST'],
+  '2-2-2': ['GK', 'LB', 'RB', 'LM', 'RM', 'CM', 'ST'],
+  '3-3': ['GK', 'LB', 'CM', 'RB', 'LM', 'RM', 'ST'],
+  '3-3-2': ['GK', 'LB', 'CB', 'RB', 'LM', 'CM', 'RM', 'ST', 'CF'],
+  '2-4-2': ['GK', 'LB', 'RB', 'LM', 'CB', 'CM', 'RM', 'ST', 'CF'],
+  '2-3-3': ['GK', 'LB', 'RB', 'LM', 'CM', 'RM', 'CB', 'ST', 'CF'],
+};
 
 function readJson(key, fallback) {
   try {
@@ -22,7 +33,7 @@ export function usePitchPal() {
   const players = ref(readJson('playerNames', defaultPlayers));
   if (!Array.isArray(players.value) || !players.value.length) players.value = defaultPlayers;
 
-  const data = reactive(readJson('u11v5', { matches: [], p: {}, availability: {}, lineups: [], saved: [], gameSplit: 'quarters' }));
+  const data = reactive(readJson('u11v5', { matches: [], p: {}, availability: {}, lineups: [], saved: [], gameSplit: 'quarters', squadSize: 7, formation: '2-3-1' }));
   data.matches ||= [];
   data.p ||= {};
   data.availability ||= {};
@@ -41,7 +52,8 @@ export function usePitchPal() {
   const periodLength = ref(Number(data.periodLength || 12.5));
   const teamName = ref(data.teamName || '');
   const opponent = ref('');
-  const formation = ref('2-3-1');
+  const squadSize = ref(Number(data.squadSize) || 7);
+  const formation = ref(data.formation || (squadSize.value === 5 ? '1-2-1' : squadSize.value === 9 ? '3-3-2' : '2-3-1'));
   const tab = ref('Team profile');
   const quarter = ref(1);
   const starters = ref([]);
@@ -73,6 +85,21 @@ export function usePitchPal() {
 
   const periodCount = computed(() => periodType.value === 'quarters' ? 4 : 2);
   const periodName = computed(() => periodType.value === 'quarters' ? 'Quarter' : 'Half');
+  const formations = computed(() => {
+    if (squadSize.value === 5) return ['1-2-1', '2-1-1', '1-1-2'];
+    if (squadSize.value === 9) return ['3-3-2', '2-4-2', '2-3-3'];
+    return ['2-3-1', '3-2-1', '2-2-2', '3-3'];
+  });
+  const positionsList = computed(() => {
+    if (squadSize.value === 5) return ['GK', 'CB', 'LB', 'RB', 'LM', 'RM', 'CM', 'ST', 'LST', 'RST'];
+    if (squadSize.value === 9) return ['GK', 'LB', 'CB', 'RB', 'LM', 'CM', 'RM', 'ST', 'CF'];
+    return ['GK', 'LB', 'RB', 'LM', 'CM', 'RM', 'ST'];
+  });
+  const formationPositions = computed(() => {
+    const order = formationPositionOrder[formation.value];
+    if (order) return order;
+    return positionsList.value.slice(0, squadSize.value);
+  });
   const availablePlayers = computed(() => players.value.filter((name) => data.availability[name]));
   const matchParticipants = computed(() => players.value.filter((name) => availableAtStart.value[name]));
   const bench = computed(() => {
@@ -109,6 +136,7 @@ export function usePitchPal() {
     data.teamName = teamName.value.trim();
     data.captain = captain.value;
     data.lineups = savedLineups;
+    data.squadSize = squadSize.value;
     localStorage.setItem('u11v5', JSON.stringify(data));
     localStorage.setItem('playerNames', JSON.stringify(players.value));
   }
@@ -240,25 +268,48 @@ export function usePitchPal() {
   function loadLineup(index) {
     const lineup = savedLineups[index];
     if (lineup) {
-      starters.value = lineup.starters.filter((name) => players.value.includes(name));
+      starters.value = lineup.starters.filter((name) => players.value.includes(name)).slice(0, squadSize.value);
       playerPositions.value = { ...lineup.positions };
-      formation.value = lineup.formation || formation.value;
+      const order = formationPositionOrder[lineup.formation];
+      if (order && order.length === squadSize.value) formation.value = lineup.formation;
       if (!captain.value && lineup.captain) captain.value = lineup.captain;
     }
+    validateFormationPositions();
     ensureDedicatedKeeper();
     normalizeLineupPositions();
+  }
+
+  function validateFormationPositions() {
+    const valid = new Set(formationPositions.value);
+    starters.value.forEach((name) => {
+      if (playerPositions.value[name] && !valid.has(playerPositions.value[name])) {
+        playerPositions.value[name] = '';
+      }
+    });
+    const order = formationPositionOrder[formation.value] || positionsList.value;
+    starters.value.forEach((name) => {
+      if (!playerPositions.value[name]) {
+        const available = order.find((pos) => !starters.value.some((starter) => starter !== name && playerPositions.value[starter] === pos));
+        if (available) playerPositions.value[name] = available;
+      }
+    });
+    return valid;
   }
 
   function ensureDedicatedKeeper() {
     const keeper = dedicatedGK.value;
     if (!keeper || !data.availability[keeper]) return;
+    while (starters.value.length > squadSize.value) {
+      const removed = starters.value.pop();
+      delete playerPositions.value[removed];
+    }
     if (!starters.value.includes(keeper)) {
       const replace = starters.value[starters.value.length - 1];
       if (replace) {
         starters.value.pop();
         delete playerPositions.value[replace];
       }
-      if (starters.value.length < 7) starters.value.push(keeper);
+      if (starters.value.length < squadSize.value) starters.value.push(keeper);
     }
     starters.value.forEach((name) => {
       if (name !== keeper && playerPositions.value[name] === 'GK') playerPositions.value[name] = '';
@@ -294,7 +345,7 @@ export function usePitchPal() {
         if (!lineup) return;
         lineup.positions ||= {};
         const replaceIndex = lineup.starters.indexOf(name) === -1 ? lineup.starters.length - 1 : -1;
-        if (replaceIndex >= 0 && lineup.starters.length >= 7) {
+        if (replaceIndex >= 0 && lineup.starters.length >= squadSize.value) {
           delete lineup.positions[lineup.starters[replaceIndex]];
           lineup.starters.splice(replaceIndex, 1);
         }
@@ -317,9 +368,10 @@ export function usePitchPal() {
     if (starters.value.includes(name)) {
       starters.value = starters.value.filter((player) => player !== name);
       delete playerPositions.value[name];
-    } else if (starters.value.length < 7 && data.availability[name]) {
+     } else if (starters.value.length < squadSize.value && data.availability[name]) {
       starters.value.push(name);
-      playerPositions.value[name] = positionsList.find((position) => !starters.value.some((starter) => starter !== name && playerPositions.value[starter] === position)) || '';
+      const order = formationPositionOrder[formation.value] || positionsList.value;
+      playerPositions.value[name] = order.find((position) => !starters.value.some((starter) => starter !== name && playerPositions.value[starter] === position)) || '';
     }
     rememberLineup();
   }
@@ -342,7 +394,7 @@ export function usePitchPal() {
         const occupantIndex = starters.value.indexOf(occupant);
         starters.value.splice(occupantIndex, 1, name);
         delete playerPositions.value[occupant];
-      } else if (starters.value.length < 7) starters.value.push(name);
+      } else if (starters.value.length < squadSize.value) starters.value.push(name);
       else return;
     } else if (occupant) {
       playerPositions.value[occupant] = playerPositions.value[name] || '';
@@ -370,6 +422,14 @@ export function usePitchPal() {
     persist();
   }
 
+  function setSquadSize(size) {
+    const newSize = Number(size);
+    if (![5, 7, 9].includes(newSize)) return;
+    squadSize.value = newSize;
+    const defaults = { 5: '1-2-1', 7: '2-3-1', 9: '3-3-2' };
+    formation.value = defaults[newSize];
+    persist();
+  }
   function resetTimer() { secondsLeft.value = Math.round((Number(periodLength.value) || 12.5) * 60); }
 
   function stopClock() {
@@ -388,7 +448,7 @@ export function usePitchPal() {
         secondsLeft.value = Math.max(0, secondsLeft.value - elapsed);
         starters.value.forEach((name) => {
           seconds[name] = (seconds[name] || 0) + elapsed;
-          if (['GK', 'LB', 'RB'].includes(playerPositions.value[name])) defensiveSeconds[name] = (defensiveSeconds[name] || 0) + elapsed;
+          if (['GK', 'LB', 'CB', 'RB'].includes(playerPositions.value[name])) defensiveSeconds[name] = (defensiveSeconds[name] || 0) + elapsed;
         });
       }
       if (secondsLeft.value <= 0) stopClock();
@@ -434,8 +494,8 @@ export function usePitchPal() {
   setupLifecycle();
 
   function beginMatch(startImmediately = true) {
-    if (starters.value.length !== 7) {
-      window.alert('Choose seven starters in Squad before kick-off.');
+    if (starters.value.length !== squadSize.value) {
+      window.alert(`Choose ${squadSize.value} starters in Squad before kick-off.`);
       tab.value = 'Squad';
       return;
     }
@@ -529,7 +589,8 @@ export function usePitchPal() {
     const incoming = selectedIn.value;
     if (out === dedicatedGK.value || incoming === dedicatedGK.value) return;
     const index = starters.value.indexOf(out);
-    const position = playerPositions.value[out] || positionsList[index] || '';
+    const order = formationPositionOrder[formation.value] || positionsList.value;
+    const position = playerPositions.value[out] || order[index] || '';
     starters.value = starters.value.filter((name) => name !== out);
     starters.value.splice(index, 0, incoming);
     delete playerPositions.value[out];
@@ -617,6 +678,41 @@ export function usePitchPal() {
     if (visibilityHandler) document.removeEventListener('visibilitychange', visibilityHandler);
   }
 
+  watch(squadSize, () => {
+    if (matchActive.value) return;
+    while (starters.value.length > squadSize.value) {
+      const removed = starters.value.pop();
+      delete playerPositions.value[removed];
+    }
+    if (dedicatedGK.value) {
+      const inStarters = starters.value.includes(dedicatedGK.value);
+      if (!inStarters) {
+        const replaceIndex = starters.value.length - 1;
+        if (replaceIndex >= 0 && starters.value.length >= squadSize.value) {
+          const replace = starters.value[replaceIndex];
+          delete playerPositions.value[replace];
+          starters.value.splice(replaceIndex, 1);
+        }
+        if (starters.value.length < squadSize.value) starters.value.push(dedicatedGK.value);
+      }
+      starters.value.forEach((name) => {
+        if (name !== dedicatedGK.value) playerPositions.value[name] = playerPositions.value[name] === 'GK' ? '' : playerPositions.value[name];
+      });
+      playerPositions.value[dedicatedGK.value] = 'GK';
+    }
+    validateFormationPositions();
+    rememberLineup();
+  });
+  watch(formation, () => {
+    if (matchActive.value) return;
+    validateFormationPositions();
+    rememberLineup();
+  });
+  watch(dedicatedGK, () => {
+    if (matchActive.value) return;
+    validateFormationPositions();
+    rememberLineup();
+  });
   watch(data, persist, { deep: true });
   watch(players, persist, { deep: true });
   watch(teamName, persist);
@@ -651,12 +747,12 @@ export function usePitchPal() {
   }
 
   return {
-    players, data, positionsList, formations, periodType, periodLength, teamName, opponent, formation, tab, dedicatedGK,
+    players, data, squadSize, positionsList, formationPositions, formations, periodType, periodLength, teamName, opponent, formation, tab, dedicatedGK,
     quarter, starters, playerPositions, captain, seconds, events, homeScore, awayScore, secondsLeft,
     matchActive, matchReady, periodRunning, matchSaved, selectedOut, selectedIn, goalScorer, goalAssist, motm, potm,
     periodCount, periodName, availablePlayers, matchParticipants, bench, activePlayers, substitutionCandidates, currentPeriodTitle, matchRows,
     matchFairness, matchPriority, recommendedMinutes, seasonRows, seasonFairness, goalDiff, recordText,
-    resultLabel, clockText: formatClock, addPlayer, renamePlayer, removePlayer, changePeriod, selectPlayer, setPlayerPosition, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, beginMatch, restartMatch,
+    resultLabel, clockText: formatClock, addPlayer, renamePlayer, removePlayer, changePeriod, selectPlayer, setPlayerPosition, toggleAvailability, setCaptain, setDedicatedGK, switchSplit, setSquadSize, beginMatch, restartMatch,
     toggleClock, nextPeriod, finishMatch, registerGoal, addOpponentGoal, chooseSubstitutionPlayer, substitute, saveMatch,
     clearSeason, rememberLineup, formatClock, formatMinutes, periodLabel, playerInitial,
     restoreMatch, dispose, fairnessColor,
